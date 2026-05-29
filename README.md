@@ -1,1 +1,1589 @@
 # Bot-Registry-Task-Explorer
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Butler Bot Taxonomy · Capability Reference</title>
+<style>
+:root {
+  --bg:#0f1117;--surface:#1a1d27;--surface2:#222636;--border:#2e3350;
+  --accent:#5b7cfa;--green:#3dd68c;--yellow:#f5c542;--red:#f56c6c;
+  --orange:#fa8c3b;--cyan:#38c9d8;--pink:#d85bf5;--violet:#a78bfa;
+  --text:#e2e6f3;--text-dim:#8892b0;--text-muted:#4a5270;
+  --code:#c3e88d;--code-bg:#1e2235;
+  --rtp:#5b7cfa;--ttp:#3dd68c;--htm:#fa8c3b;--vtm:#d85bf5;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;font-size:13px;}
+header{background:linear-gradient(135deg,#1a1d2e,#222540);border-bottom:1px solid var(--border);padding:18px 28px;}
+header h1{font-size:18px;font-weight:700;margin-bottom:4px;}
+header .sub{color:var(--text-dim);font-size:11px;}
+.tabs{display:flex;flex-wrap:wrap;gap:2px;background:var(--surface);border-bottom:1px solid var(--border);padding:8px 12px 0;}
+.tab{padding:8px 14px;cursor:pointer;border-radius:6px 6px 0 0;font-size:12px;font-weight:500;color:var(--text-dim);border:1px solid transparent;border-bottom:none;transition:all .15s;white-space:nowrap;}
+.tab:hover{color:var(--text);background:var(--surface2);}
+.tab.active{color:var(--accent);background:var(--bg);border-color:var(--border);margin-bottom:-1px;}
+.content{display:none;padding:22px 26px;max-width:1500px;}
+.content.active{display:block;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px 18px;margin-bottom:14px;}
+.card-title{font-size:13px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+table{width:100%;border-collapse:collapse;font-size:12px;}
+th{background:var(--surface2);color:var(--text-dim);font-weight:600;padding:7px 10px;text-align:left;border:1px solid var(--border);font-size:11px;text-transform:uppercase;letter-spacing:.4px;}
+td{padding:7px 10px;border:1px solid var(--border);vertical-align:top;line-height:1.5;}
+tr:nth-child(even) td{background:rgba(21,24,34,.35);}
+td code{font-family:monospace;font-size:11px;color:var(--code);background:var(--code-bg);padding:1px 4px;border-radius:3px;}
+.src{font-size:10px;color:var(--text-muted);font-style:italic;}
+.sep{border-top:1px solid var(--border);margin:14px 0;}
+h3{font-size:13px;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:8px;}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.grid4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:12px;}
+
+/* chips */
+.chip{display:inline-flex;align-items:center;gap:3px;font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px;margin:1px;}
+.c-rtp{background:#1a2350;color:var(--rtp);}
+.c-ttp{background:#1a3828;color:var(--ttp);}
+.c-htm{background:#3d2510;color:var(--htm);}
+.c-vtm{background:#2d1045;color:var(--vtm);}
+.c-vda{background:#0d2535;color:var(--cyan);}
+.c-fork{background:#2a1e0f;color:var(--yellow);}
+.c-conv{background:#1c2535;color:#7ab4fa;}
+.c-agv{background:#2a1200;color:#f09840;}
+/* ── Matrix capability info-icon tooltips ────────────────────── */
+.tip-i{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:14px;height:14px;border-radius:50%;
+  background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.45);
+  font-size:9px;font-weight:700;cursor:help;
+  position:relative;margin-left:5px;vertical-align:middle;
+  flex-shrink:0;user-select:none;font-style:normal;
+  border:1px solid rgba(255,255,255,0.12);
+  transition:background .15s,color .15s;
+}
+.tip-i:hover{background:rgba(255,255,255,0.18);color:#fff;}
+.tip-i::after{
+  content:attr(data-tip);
+  position:absolute;left:0;top:calc(100% + 6px);z-index:9999;
+  background:#10101e;color:#d8d8ea;
+  border:1px solid rgba(255,255,255,0.13);border-radius:7px;
+  padding:8px 12px;font-size:10px;line-height:1.6;
+  width:270px;box-shadow:0 6px 20px rgba(0,0,0,0.6);
+  pointer-events:none;font-weight:400;white-space:normal;display:none;
+}
+.tip-i:hover::after{display:block;}
+
+
+.c-order{background:#1e2a20;color:var(--green);}
+.c-novda{background:#2a2a2a;color:var(--text-muted);}
+.c-slam{background:#0d2a2e;color:#38c9d8;}
+.c-grid{background:#2a2200;color:#f5c542;}
+
+/* filter */
+.filter-bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;align-items:center;}
+.fb{padding:5px 14px;border-radius:20px;border:1px solid var(--border);background:var(--surface2);color:var(--text-dim);font-size:11px;font-weight:600;cursor:pointer;transition:all .15s;}
+.fb:hover{color:var(--text);}
+.fb.a-all{background:var(--accent);color:#fff;border-color:var(--accent);}
+.fb.a-rtp{background:var(--rtp);color:#fff;border-color:var(--rtp);}
+.fb.a-ttp{background:var(--ttp);color:#111;border-color:var(--ttp);}
+.fb.a-htm{background:var(--htm);color:#fff;border-color:var(--htm);}
+.fb.a-vtm{background:var(--vtm);color:#fff;border-color:var(--vtm);}
+input.sb{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:6px 12px;color:var(--text);font-size:12px;width:200px;outline:none;}
+input.sb:focus{border-color:var(--accent);}
+
+/* bot cards */
+.bot-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:10px;}
+.bc{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:13px 15px;transition:border-color .15s;}
+.bc:hover{border-color:var(--accent);}
+.bc.cat-rtp{border-left:3px solid var(--rtp);}
+.bc.cat-ttp{border-left:3px solid var(--ttp);}
+.bc.cat-htm{border-left:3px solid var(--htm);}
+.bc.cat-vtm{border-left:3px solid var(--vtm);}
+.bc.hidden{display:none;}
+.bn{font-size:12px;font-weight:700;margin-bottom:3px;}
+.bm{font-size:10px;color:var(--text-muted);margin-bottom:8px;}
+
+/* capability rows inside cards */
+.cap-grid{display:grid;grid-template-columns:1fr 1fr;gap:3px 10px;margin-bottom:8px;}
+.cg3{grid-template-columns:1fr 1fr 1fr;}
+.cl{font-size:9px;text-transform:uppercase;letter-spacing:.4px;color:var(--text-muted);}
+.cv{font-size:11px;font-weight:600;}
+
+/* speed bar */
+.sbw{margin-top:4px;}
+.sbl{display:flex;justify-content:space-between;font-size:9px;color:var(--text-muted);margin-bottom:2px;}
+.sbb{background:var(--surface2);border-radius:3px;height:5px;overflow:hidden;}
+.sbf{height:100%;border-radius:3px;}
+
+/* alerts */
+.warn{background:#2d1a00;border:1px solid #6b3d00;border-radius:6px;padding:10px 14px;font-size:11px;line-height:1.6;color:var(--yellow);margin-bottom:12px;}
+.info{background:#0d2035;border:1px solid #1a4060;border-radius:6px;padding:10px 14px;font-size:11px;line-height:1.6;color:var(--cyan);margin-bottom:12px;}
+
+/* epics */
+.epic{border:1px solid var(--border);border-radius:10px;margin-bottom:14px;overflow:hidden;}
+.eh{background:var(--surface2);padding:11px 15px;display:flex;align-items:center;gap:10px;}
+.eh h4{font-size:13px;font-weight:700;flex:1;}
+.eb{padding:14px 16px;}
+.story{background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:9px 13px;margin-bottom:8px;}
+.st{font-size:12px;font-weight:600;margin-bottom:3px;}
+.sd{font-size:11px;color:var(--text-dim);line-height:1.5;}
+.tag{display:inline-block;font-size:10px;font-weight:700;padding:1px 7px;border-radius:10px;}
+.p0{background:#3d0d0d;color:var(--red);}
+.p1{background:#3d2800;color:var(--orange);}
+.p2{background:#2a3000;color:var(--yellow);}
+
+.flow-row{display:flex;align-items:center;flex-wrap:wrap;gap:0;margin-bottom:6px;}
+.fn{background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:5px 11px;font-size:11px;font-weight:600;white-space:nowrap;}
+.fa{color:var(--text-muted);padding:0 7px;font-size:13px;}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>⚙️ Task &amp; Event Taxonomy · Bot Capability Reference</h1>
+  <div class="sub">Warehouse Automation Platform · Erlang/OTP · 4 bot categories · 28 variants · Code: <code>relay_pps_subtasks.erl</code> · <code>ranger_profile.erl</code> · <code>sys.config</code> · <code>gmc.hrl</code> · Hardware specs: Highspot datasheets (Ranger™ RTP M 3.0 · HAI HTM H · HTM QT F · HAI A42T(D)-E1 · HAI A42T-L-E2-H · QT VTM Gripper variants) · quicktron.com (M100 · M60 · H80 · C56) · hairobotics.com (A42 · A42T family)</div>
+</header>
+
+<div class="tabs">
+  <div class="tab active" onclick="showTab('bots',this)">🤖 Bot Registry</div>
+  <div class="tab" onclick="showTab('tasks',this)">📋 Task Taxonomy</div>
+  <div class="tab" onclick="showTab('subtasks',this)">🔧 Subtask Catalogue</div>
+  <div class="tab" onclick="showTab('diagram',this)">🔗 Relationships</div>
+  <div class="tab" onclick="showTab('events',this)">📡 Event Taxonomy</div>
+  <div class="tab" onclick="showTab('engine',this)">⚡ Execution Engine</div>
+</div>
+
+<!-- ═══ TAB 1: BOT REGISTRY ═══ -->
+<div id="tab-bots" class="content active">
+
+  <div class="card">
+    <div class="card-title">Bot Category Overview <span class="src">ranger_profile.erl:35 · gmc.hrl · sys.config:butler_type</span></div>
+    <div class="grid4">
+      <div style="background:var(--surface2);border:1px solid #2a3a70;border-radius:8px;padding:13px;">
+        <div style="color:var(--rtp);font-size:15px;font-weight:800;margin-bottom:3px;">RTP</div>
+        <div style="font-size:12px;font-weight:600;margin-bottom:5px;">Rack to Person Robot</div>
+        <div style="font-size:11px;color:var(--text-dim);line-height:1.6;">Carries entire storage racks to pick stations. Floor-level travel with electromagnetic/mechanical rack-lift end effector. Legacy (GO) and third-party (Quicktron) variants. <strong style="color:#38c9d8;">GO bots: SLAM nav (markerless).</strong> <strong style="color:#f5c542;">QT bots: Grid nav (QR code floor).</strong></div>
+        <div style="margin-top:6px;" class="src">?RTP_BOTS · mhs/rtp_rangers</div>
+      </div>
+      <div style="background:var(--surface2);border:1px solid #1e4030;border-radius:8px;padding:13px;">
+        <div style="color:var(--ttp);font-size:15px;font-weight:800;margin-bottom:3px;">TTP</div>
+        <div style="font-size:12px;font-weight:600;margin-bottom:5px;">Tote to Person</div>
+        <div style="font-size:11px;color:var(--text-dim);line-height:1.6;">Tall shelf-climbing AGVs. Telescopic fork extends vertically to retrieve individual totes from multi-level racking. All Hai Robotics A42 variants. All use VDA5050. <strong style="color:#f5c542;">Grid nav (DM code + Inertial).</strong> Safety LiDAR front+rear on all variants.</div>
+        <div style="margin-top:6px;" class="src">?TTP_BOTS · mhs/ttp_rangers</div>
+      </div>
+      <div style="background:var(--surface2);border:1px solid #3d2a10;border-radius:8px;padding:13px;">
+        <div style="color:var(--htm);font-size:15px;font-weight:800;margin-bottom:3px;">HTM</div>
+        <div style="font-size:12px;font-weight:600;margin-bottom:5px;">Horizontal Tote Mover</div>
+        <div style="font-size:11px;color:var(--text-dim);line-height:1.6;">Compact relay bots that move totes horizontally. Two sub-types: <strong>fork-pick</strong> (HTM_QT_M5F) and <strong>conveyor-transfer</strong> (K50 family). All VDA5050. Dual velocity profiles for docking. <strong style="color:#f5c542;">Grid nav (QR code + Inertial).</strong></div>
+        <div style="margin-top:6px;" class="src">?HTM_BOTS · mhs/htm_rangers</div>
+      </div>
+      <div style="background:var(--surface2);border:1px solid #2d1045;border-radius:8px;padding:13px;">
+        <div style="color:var(--vtm);font-size:15px;font-weight:800;margin-bottom:3px;">VTM</div>
+        <div style="font-size:12px;font-weight:600;margin-bottom:5px;">Vertical Tote Mover</div>
+        <div style="font-size:11px;color:var(--text-dim);line-height:1.6;">Elevator-type AGVs. Fork transfers totes across vertical levels — up to 12 m. All VDA5050. Bidirectional movement with always-rotate strategy. <strong style="color:#f5c542;">Grid nav: DM+Inertial (HAI) · QR Code (QT).</strong></div>
+        <div style="margin-top:6px;" class="src">?VTM_BOTS · mhs/vtm_rangers</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:6px;">
+    <div class="filter-bar" style="margin-bottom:0;">
+      <button class="fb a-all" onclick="filterBots('all',this)">All (28)</button>
+      <button class="fb" onclick="filterBots('rtp',this)">🔵 RTP (7)</button>
+      <button class="fb" onclick="filterBots('ttp',this)">🟢 TTP (8)</button>
+      <button class="fb" onclick="filterBots('htm',this)">🟠 HTM (4)</button>
+      <button class="fb" onclick="filterBots('vtm',this)">🟣 VTM (5)</button>
+    </div>
+    <input class="sb" placeholder="Search…" oninput="searchBots(this.value)">
+  </div>
+  <div style="font-size:10px;color:var(--text-muted);margin-bottom:12px;">Speed bar max = 4200 mm/s (HTM QT F hardware). sys.config profile max = 4000 mm/s (hai_relay_K50). ★ = secondary slow-docking profile active. Specs verified against Highspot datasheets.</div>
+
+  <div class="bot-grid" id="botGrid">
+
+<!-- RTP: Butler M-class -->
+<div class="bc cat-rtp" data-cat="rtp" data-name="butler 1.5 2.0 2.1 cleanzone m-class greyorange">
+  <div class="bn">Butler 1.5 / 2.0 / 2.1 / CleanZone</div>
+  <div class="bm">GreyOrange · M-class</div>
+  <div class="cap-grid cg3">
+    <div><div class="cl">Agent Class</div><div class="cv">AGV</div></div>
+    <div><div class="cl">Navigation</div><div class="cv" style="color:#f5c542;">Grid Nav (QR Code floor)</div></div>
+    <div><div class="cl">End Effector</div><div class="cv">Rack Lift</div></div>
+    <div><div class="cl">Dimensions (B×L)</div><div class="cv">764 × 1054 mm</div></div>
+    <div><div class="cl">Height</div><div class="cv">410 mm</div></div>
+    <div><div class="cl">Max Velocity</div><div class="cv">1000 mm/s</div></div>
+    <div><div class="cl">Acceleration</div><div class="cv">590 mm/s²</div></div>
+    <div><div class="cl">VDA Protocol</div><div class="cv" style="color:var(--text-muted);">❌ Proprietary</div></div>
+    <div><div class="cl">Bi-dir Movement</div><div class="cv" style="font-size:10px;">_02 Bi-directional</div></div>
+    <div><div class="cl">Obstacle Avoidance</div><div class="cv">Safety LiDAR (front + rear) · E-stop</div></div>
+  </div>
+  <div class="sbw"><div class="sbl"><span>Speed</span><span>1000 mm/s</span></div><div class="sbb"><div class="sbf" style="width:25%;background:var(--rtp)"></div></div></div>
+  <div style="margin-top:7px;display:flex;flex-wrap:wrap;gap:3px;">
+    <span class="chip c-rtp">RTP</span><span class="chip c-agv">AGV</span><span class="chip c-grid">Grid Nav</span><span class="chip c-novda">No VDA</span>
+  </div>
+  <div class="src" style="margin-top:5px;">butler_dimensions_M · profile_type_M · versions:"1.5","2.0","2.1","CleanZone"</div>
+</div>
+
+<!-- RTP: Butler XL -->
+<div class="bc cat-rtp" data-cat="rtp" data-name="butler xl xl1.1 greyorange large">
+  <div class="bn">Butler XL / XL1.1</div>
+  <div class="bm">GreyOrange · XL-class</div>
+  <div class="cap-grid cg3">
+    <div><div class="cl">Agent Class</div><div class="cv">AGV</div></div>
+    <div><div class="cl">Navigation</div><div class="cv" style="color:#f5c542;">Grid Nav (QR Code floor)</div></div>
+    <div><div class="cl">End Effector</div><div class="cv">Rack Lift</div></div>
+    <div><div class="cl">Dimensions (B×L)</div><div class="cv">998 × 1506 mm</div></div>
+    <div><div class="cl">Height</div><div class="cv">410 mm</div></div>
+    <div><div class="cl">Max Velocity</div><div class="cv">1000 mm/s</div></div>
+    <div><div class="cl">Acceleration</div><div class="cv">181 mm/s²</div></div>
+    <div><div class="cl">VDA Protocol</div><div class="cv" style="color:var(--text-muted);">❌ Proprietary</div></div>
+    <div><div class="cl">Bi-dir Movement</div><div class="cv" style="font-size:10px;">_02 Bi-directional</div></div>
+    <div><div class="cl">Obstacle Avoidance</div><div class="cv">Safety LiDAR (front + rear) · E-stop</div></div>
+  </div>
+  <div class="sbw"><div class="sbl"><span>Speed</span><span>1000 mm/s</span></div><div class="sbb"><div class="sbf" style="width:25%;background:var(--rtp)"></div></div></div>
+  <div style="margin-top:7px;display:flex;flex-wrap:wrap;gap:3px;">
+    <span class="chip c-rtp">RTP</span><span class="chip c-agv">AGV</span><span class="chip c-grid">Grid Nav</span><span class="chip c-novda">No VDA</span>
+  </div>
+  <div class="src" style="margin-top:5px;">butler_dimensions_XL · profile_type_XL · versions:"XL","XL1.1"</div>
+</div>
+
+<!-- RTP: RangerGTP / M3.0_CE -->
+<div class="bc cat-rtp" data-cat="rtp" data-name="rangergtp m3.0_ce ninja ranger greyorange">
+  <div class="bn">RangerGTP / M3.0_CE</div>
+  <div class="bm">GreyOrange · Ninja-class · <em>Ranger™ RTP M 3.0</em></div>
+  <div class="cap-grid">
+    <div><div class="cl">Agent Class</div><div class="cv">AGV</div></div>
+    <div><div class="cl">Navigation</div><div class="cv" style="color:#f5c542;">Grid Nav (QR Code floor)</div></div>
+    <div><div class="cl">End Effector</div><div class="cv">Rack Lift</div></div>
+    <div><div class="cl">Dimensions (L×W×H)</div><div class="cv">979 × 700 × 285 mm</div></div>
+    <div><div class="cl">Robot Weight</div><div class="cv">222 kg (w/ battery)</div></div>
+    <div><div class="cl">Max Velocity (unladen)</div><div class="cv">2000 mm/s</div></div>
+    <div><div class="cl">Max Velocity (laden)</div><div class="cv">1500 mm/s</div></div>
+    <div><div class="cl">sys.config Velocity</div><div class="cv">1500 mm/s · Accel: 477 mm/s²</div></div>
+    <div><div class="cl">Max Payload (incl. rack)</div><div class="cv" style="color:var(--yellow);">600 kg</div></div>
+    <div><div class="cl">Battery</div><div class="cv">Li-ion 52V / 40 Ah</div></div>
+    <div><div class="cl">Runtime</div><div class="cv">12–14 h</div></div>
+    <div><div class="cl">VDA Protocol</div><div class="cv" style="color:var(--text-muted);">❌ Proprietary</div></div>
+    <div><div class="cl">Operating Temp</div><div class="cv">0–45 °C · 30–95% RH</div></div>
+    <div><div class="cl">Obstacle Avoidance</div><div class="cv">Safety LiDAR (front + rear) · E-stop</div></div>
+  </div>
+  <div class="sbw"><div class="sbl"><span>Speed</span><span>2000 mm/s unladen / 1500 mm/s laden</span></div><div class="sbb"><div class="sbf" style="width:50%;background:var(--rtp)"></div></div></div>
+  <div style="margin-top:7px;display:flex;flex-wrap:wrap;gap:3px;">
+    <span class="chip c-rtp">RTP</span><span class="chip c-agv">AGV</span><span class="chip c-grid">Grid Nav</span><span class="chip c-novda">No VDA</span>
+  </div>
+  <div class="src" style="margin-top:5px;">butler_dimensions_Ninja · profile_type_Ninja_1_5 · versions:"RangerGTP","M3.0_CE" · Datasheet: Ranger™ RTP M 3.0</div>
+</div>
+
+<!-- RTP: Quicktron M100 -->
+<div class="bc cat-rtp" data-cat="rtp" data-name="quicktron m100 ce vda third-party">
+  <div class="bn">Quicktron M100(CE)</div>
+  <div class="bm">Quicktron · 3rd-party RTP · VDA5050 · <em>M100</em></div>
+  <div class="cap-grid cg3">
+    <div><div class="cl">Agent Class</div><div class="cv">AGV</div></div>
+    <div><div class="cl">Navigation</div><div class="cv" style="color:#f5c542;">Grid Nav (QR Code · ±10 mm)</div></div>
+    <div><div class="cl">End Effector</div><div class="cv">Rack Lift (60 mm)</div></div>
+    <div><div class="cl">VDA Protocol</div><div class="cv" style="color:var(--cyan);">✅ VDA5050</div></div>
+    <div><div class="cl">Dimensions (B×L)</div><div class="cv">832 × 1182 mm</div></div>
+    <div><div class="cl">Height</div><div class="cv">410 mm</div></div>
+    <div><div class="cl">Robot Weight</div><div class="cv">213 kg</div></div>
+    <div><div class="cl">Rated Payload</div><div class="cv" style="color:var(--yellow);">1000 kg</div></div>
+    <div><div class="cl">Max Velocity</div><div class="cv">1500 mm/s (official) · 1200 sys</div></div>
+    <div><div class="cl">Acceleration</div><div class="cv">590 mm/s²</div></div>
+    <div><div class="cl">Battery Runtime</div><div class="cv">7.5 h · Auto-charging</div></div>
+    <div><div class="cl">Bi-dir Movement</div><div class="cv" style="font-size:10px;">_01 Front-face only</div></div>
+    <div><div class="cl">Obstacle Avoidance</div><div class="cv">Safety LiDAR · E-stop</div></div>
+  </div>
+  <div class="sbw"><div class="sbl"><span>Speed</span><span>1500 mm/s (official) · 1200 mm/s (sys.config)</span></div><div class="sbb"><div class="sbf" style="width:37.5%;background:var(--rtp)"></div></div></div>
+  <div style="margin-top:7px;display:flex;flex-wrap:wrap;gap:3px;">
+    <span class="chip c-rtp">RTP</span><span class="chip c-agv">AGV</span><span class="chip c-grid">Grid Nav</span><span class="chip c-vda">VDA5050</span>
+  </div>
+  <div class="src" style="margin-top:5px;">butler_dimensions_Quicktron · profile_type_Quicktron · ?VDA_PROTO_BOTS · Source: quicktron.com M100</div>
+</div>
+
+<!-- RTP: Quicktron M60 -->
+<div class="bc cat-rtp" data-cat="rtp" data-name="quicktron m60 ce compact vda third-party">
+  <div class="bn">Quicktron M60(CE)</div>
+  <div class="bm">Quicktron · Compact 3rd-party RTP · VDA5050 · <em>M60</em></div>
+  <div class="cap-grid cg3">
+    <div><div class="cl">Agent Class</div><div class="cv">AGV</div></div>
+    <div><div class="cl">Navigation</div><div class="cv" style="color:#f5c542;">Grid Nav (QR Code · ±10 mm)</div></div>
+    <div><div class="cl">End Effector</div><div class="cv">Rack Lift</div></div>
+    <div><div class="cl">VDA Protocol</div><div class="cv" style="color:var(--cyan);">✅ VDA5050</div></div>
+    <div><div class="cl">Dimensions (B×L)</div><div class="cv">750 × 980 mm</div></div>
+    <div><div class="cl">Height</div><div class="cv">240 mm</div></div>
+    <div><div class="cl">Robot Weight</div><div class="cv">145 kg</div></div>
+    <div><div class="cl">Rated Payload</div><div class="cv" style="color:var(--yellow);">600 kg</div></div>
+    <div><div class="cl">Max Velocity</div><div class="cv">2000 mm/s (official) · 1500 sys</div></div>
+    <div><div class="cl">Acceleration</div><div class="cv">400 mm/s²</div></div>
+    <div><div class="cl">Battery Runtime</div><div class="cv">9 h · Auto-charging</div></div>
+    <div><div class="cl">Bi-dir Movement</div><div class="cv" style="font-size:10px;">_01 Front-face only</div></div>
+    <div><div class="cl">Obstacle Avoidance</div><div class="cv">Safety LiDAR · E-stop</div></div>
+  </div>
+  <div class="sbw"><div class="sbl"><span>Speed</span><span>2000 mm/s (official) · 1500 mm/s (sys.config)</span></div><div class="sbb"><div class="sbf" style="width:50%;background:var(--rtp)"></div></div></div>
+  <div style="margin-top:7px;display:flex;flex-wrap:wrap;gap:3px;">
+    <span class="chip c-rtp">RTP</span><span class="chip c-agv">AGV</span><span class="chip c-grid">Grid Nav</span><span class="chip c-vda">VDA5050</span>
+  </div>
+  <div class="src" style="margin-top:5px;">butler_dimensions_Quicktron_M60(CE) · profile_type_quicktron_M60 · ?VDA_PROTO_BOTS · Source: quicktron.com M60</div>
+</div>
+
+<!-- RTP: RTP_QT_H80D_XH -->
+<div class="bc cat-rtp" data-cat="rtp" data-name="rtp qt h80d xh quicktron low-profile vda">
+  <div class="bn">RTP_QT_H80D_XH</div>
+  <div class="bm">Quicktron · Low-profile 3rd-party RTP · VDA5050 · <em>H80</em></div>
+  <div class="cap-grid cg3">
+    <div><div class="cl">Agent Class</div><div class="cv">AGV</div></div>
+    <div><div class="cl">Navigation</div><div class="cv" style="color:#f5c542;">Grid Nav (QR Code · ±10 mm)</div></div>
+    <div><div class="cl">End Effector</div><div class="cv">Rack Lift (60 mm)</div></div>
+    <div><div class="cl">VDA Protocol</div><div class="cv" style="color:var(--cyan);">✅ VDA5050</div></div>
+    <div><div class="cl">Dimensions (B×L)</div><div class="cv">660 × 960 mm</div></div>
+    <div><div class="cl">Height</div><div class="cv">260 mm (ultra-low)</div></div>
+    <div><div class="cl">Rated Payload</div><div class="cv" style="color:var(--yellow);">800 kg</div></div>
+    <div><div class="cl">Max Velocity</div><div class="cv">1500 mm/s</div></div>
+    <div><div class="cl">Acceleration</div><div class="cv">400 mm/s²</div></div>
+    <div><div class="cl">Battery Runtime</div><div class="cv">&gt;8 h · Auto-charging</div></div>
+    <div><div class="cl">Bi-dir Movement</div><div class="cv" style="font-size:10px;">_01 Front-face only</div></div>
+    <div><div class="cl">Obstacle Avoidance</div><div class="cv">Safety LiDAR · E-stop</div></div>
+  </div>
+  <div class="sbw"><div class="sbl"><span>Speed</span><span>1500 mm/s · Payload: 800 kg · Ultra-low profile 260 mm</span></div><div class="sbb"><div class="sbf" style="width:37.5%;background:var(--rtp)"></div></div></div>
+  <div style="margin-top:7px;display:flex;flex-wrap:wrap;gap:3px;">
+    <span class="chip c-rtp">RTP</span><span class="chip c-agv">AGV</span><span class="chip c-grid">Grid Nav</span><span class="chip c-vda">VDA5050</span>
+  </div>
+  <div class="src" style="margin-top:5px;">butler_dimensions_RTP_QT_H80D_XH · profile_type_RTP_QT_H80D_XH · ?VDA_PROTO_BOTS · Source: quicktron.com H80</div>
+</div>
+
+<!-- RTP: RTP_QT_M100C_C -->
+<div class="bc cat-rtp" data-cat="rtp" data-name="rtp qt m100c c quicktron vda">
+  <div class="bn">RTP_QT_M100C_C</div>
+  <div class="bm">Quicktron · 3rd-party RTP · VDA5050 · <em>M100C</em></div>
+  <div class="cap-grid cg3">
+    <div><div class="cl">Agent Class</div><div class="cv">AGV</div></div>
+    <div><div class="cl">Navigation</div><div class="cv" style="color:#f5c542;">Grid Nav (QR Code · ±10 mm)</div></div>
+    <div><div class="cl">End Effector</div><div class="cv">Rack Lift (60 mm)</div></div>
+    <div><div class="cl">VDA Protocol</div><div class="cv" style="color:var(--cyan);">✅ VDA5050</div></div>
+    <div><div class="cl">Dimensions (B×L)</div><div class="cv">832 × 1180 mm</div></div>
+    <div><div class="cl">Height</div><div class="cv">260 mm</div></div>
+    <div><div class="cl">Rated Payload</div><div class="cv" style="color:var(--yellow);">1000 kg (M100-class)</div></div>
+    <div><div class="cl">Max Velocity</div><div class="cv">1500 mm/s (est.) · 1200 sys</div></div>
+    <div><div class="cl">Acceleration</div><div class="cv">400 mm/s²</div></div>
+    <div><div class="cl">Battery Runtime</div><div class="cv">~7.5 h · Auto-charging</div></div>
+    <div><div class="cl">Bi-dir Movement</div><div class="cv" style="font-size:10px;">_01 Front-face only</div></div>
+    <div><div class="cl">Obstacle Avoidance</div><div class="cv">Safety LiDAR · E-stop</div></div>
+  </div>
+  <div class="sbw"><div class="sbl"><span>Speed</span><span>1500 mm/s (est. M100-class) · 1200 mm/s (sys.config)</span></div><div class="sbb"><div class="sbf" style="width:37.5%;background:var(--rtp)"></div></div></div>
+  <div style="margin-top:7px;display:flex;flex-wrap:wrap;gap:3px;">
+    <span class="chip c-rtp">RTP</span><span class="chip c-agv">AGV</span><span class="chip c-grid">Grid Nav</span><span class="chip c-vda">VDA5050</span>
+  </div>
+  <div class="src" style="margin-top:5px;">butler_dimensions_RTP_QT_M100C_C · profile_type_RTP_QT_M100C_C · ?VDA_PROTO_BOTS · Source: quicktron.com (M100C ≈ M100-class)</div>
+</div>
+
+<!-- TTP: A42D -->
+<div class="bc cat-ttp" data-cat="ttp" data-name="hai rttp a42d tote to person fork">
+  <div class="bn">hai_RTTP_A42D</div>
+  <div class="bm">Hai Robotics · TTP · VDA5050</div>
+  <div class="cap-grid cg3">
+    <div><div class="cl">Agent Class</div><div class="cv">AGV</div></div>
+    <div><div class="cl">Navigation</div><div class="cv" style="color:#f5c542;">Grid Nav (DM+Inertial)</div></div>
+    <div><div class="cl">End Effector</div><div class="cv">Fork / Tote Puller</div></div>
+    <div><div class="cl">VDA Protocol</div><div class="cv" style="color:var(--cyan);">✅ VDA5050</div></div>
+    <div><div class="cl">Dimensions (B×L)</div><div class="cv">1060 × 1810 mm</div></div>
+    <div><div class="cl">Bot Height</div><div class="cv">2000 mm</div></div>
+    <div><div class="cl">Bi-dir Movement</div><div class="cv" style="font-size:10px;">_05 Bi-dir + dest-check</div></div>
+    <div><div class="cl">Max Shelf Reach</div><div class="cv">5000 mm</div></div>
+    <div><div class="cl">Telescopic Reach</div><div class="cv">7000 mm</div></div>
+    <div><div class="cl">First Tray Height</div><div class="cv">350 mm</div></div>
+    <div><div class="cl">Case Payload</div><div class="cv" style="color:var(--yellow);">30 kg/case · up to 9 cases</div></div>
+    <div><div class="cl">Battery</div><div class="cv">LFP · Auto-charging</div></div>
+    <div><div class="cl">Certification</div><div class="cv">CE · NRTL</div></div>
+    <div><div class="cl">Obstacle Avoidance</div><div class="cv">Safety LiDAR (front+rear) · Obstacle detect · Anti-collision · E-stop</div></div>
+  </div>
+  <div class="sbw"><div class="sbl"><span>Travel Speed</span><span>1500 mm/s · Fork: 0.55 mm/ms</span></div><div class="sbb"><div class="sbf" style="width:37.5%;background:var(--ttp)"></div></div></div>
+  <div style="margin-top:7px;display:flex;flex-wrap:wrap;gap:3px;">
+    <span class="chip c-ttp">TTP</span><span class="chip c-agv">AGV</span><span class="chip c-grid">Grid Nav</span><span class="chip c-vda">VDA5050</span><span class="chip c-fork">Fork</span>
+  </div>
+  <div class="src" style="margin-top:5px;">butler_dimensions_A42D · profile_type_A42D · vertical_movement_profile_map · Source: hairobotics.com A42</div>
+</div>
+
+<!-- TTP: A42N -->
+<div class="bc cat-ttp" data-cat="ttp" data-name="hai rttp a42n">
+  <div class="bn">hai_RTTP_A42N</div>
+  <div class="bm">Hai Robotics · TTP · VDA5050</div>
+  <div class="cap-grid cg3">
+    <div><div class="cl">Agent Class</div><div class="cv">AGV</div></div>
+    <div><div class="cl">Navigation</div><div class="cv" style="color:#f5c542;">Grid Nav (DM+Inertial)</div></div>
+    <div><div class="cl">End Effector</div><div class="cv">Fork / Tote Puller</div></div>
+    <div><div class="cl">VDA Protocol</div><div class="cv" style="color:var(--cyan);">✅ VDA5050</div></div>
+    <div><div class="cl">Dimensions (B×L)</div><div class="cv">1060 × 1720 mm</div></div>
+    <div><div class="cl">Bot Height</div><div class="cv">2000 mm</div></div>
+    <div><div class="cl">Bi-dir Movement</div><div class="cv" style="font-size:10px;">_05 Bi-dir + dest-check</div></div>
+    <div><div class="cl">Max Shelf Reach</div><div class="cv">5000 mm</div></div>
+    <div><div class="cl">Telescopic Reach</div><div class="cv">7000 mm</div></div>
+    <div><div class="cl">First Tray Height</div><div class="cv">350 mm</div></div>
+    <div><div class="cl">Case Payload</div><div class="cv" style="color:var(--yellow);">30 kg/case · up to 9 cases</div></div>
+    <div><div class="cl">Battery</div><div class="cv">LFP · Auto-charging</div></div>
+    <div><div class="cl">Certification</div><div class="cv">CE · NRTL</div></div>
+    <div><div class="cl">Obstacle Avoidance</div><div class="cv">Safety LiDAR (front+rear) · Obstacle detect · Anti-collision · E-stop</div></div>
+  </div>
+  <div class="sbw"><div class="sbl"><span>Travel Speed</span><span>1600 mm/s · Accel: 400 mm/s²</span></div><div class="sbb"><div class="sbf" style="width:40%;background:var(--ttp)"></div></div></div>
+  <div style="margin-top:7px;display:flex;flex-wrap:wrap;gap:3px;">
+    <span class="chip c-ttp">TTP</span><span class="chip c-agv">AGV</span><span class="chip c-grid">Grid Nav</span><span class="chip c-vda">VDA5050</span><span class="chip c-fork">Fork</span>
+  </div>
+  <div class="src" style="margin-top:5px;">butler_dimensions_A42N · profile_type_A42N · Source: hairobotics.com A42</div>
+</div>
+
+<!-- TTP: A42G_E4 -->
+<div class="bc cat-ttp" data-cat="ttp" data-name="hai rttp a42g e4">
+  <div class="bn">hai_RTTP_A42G_E4</div>
+  <div class="bm">Hai Robotics · TTP · VDA5050</div>
+  <div class="cap-grid cg3">
+    <div><div class="cl">Agent Class</div><div class="cv">AGV</div></div>
+    <div><div class="cl">Navigation</div><div class="cv" style="color:#f5c542;">Grid Nav (DM+Inertial)</div></div>
+    <div><div class="cl">End Effector</div><div class="cv">Fork / Tote Puller</div></div>
+    <div><div class="cl">VDA Protocol</div><div class="cv" style="color:var(--cyan);">✅ VDA5050</div></div>
+    <div><div class="cl">Dimensions (B×L)</div><div class="cv">1058 × 1658 mm</div></div>
+    <div><div class="cl">Bot Height</div><div class="cv">2000 mm</div></div>
+    <div><div class="cl">Bi-dir Movement</div><div class="cv" style="font-size:10px;">_05 Bi-dir + dest-check</div></div>
+    <div><div class="cl">Max Shelf Reach</div><div class="cv">5000 mm</div></div>
+    <div><div class="cl">Telescopic Reach</div><div class="cv">7000 mm</div></div>
+    <div><div class="cl">First Tray Height</div><div class="cv">350 mm</div></div>
+    <div><div class="cl">Case Payload</div><div class="cv" style="color:var(--yellow);">30 kg/case · up to 9 cases</div></div>
+    <div><div class="cl">Battery</div><div class="cv">LFP · Auto-charging</div></div>
+    <div><div class="cl">Certification</div><div class="cv">CE · NRTL</div></div>
+    <div><div class="cl">Obstacle Avoidance</div><div class="cv">Safety LiDAR (front+rear) · Obstacle detect · Anti-collision · E-stop</div></div>
+  </div>
+  <div class="sbw"><div class="sbl"><span>Travel Speed</span><span>1600 mm/s</span></div><div class="sbb"><div class="sbf" style="width:40%;background:var(--ttp)"></div></div></div>
+  <div style="margin-top:7px;display:flex;flex-wrap:wrap;gap:3px;">
+    <span class="chip c-ttp">TTP</span><span class="chip c-agv">AGV</span><span class="chip c-grid">Grid Nav</span><span class="chip c-vda">VDA5050</span><span class="chip c-fork">Fork</span>
+  </div>
+  <div class="src" style="margin-top:5px;">butler_dimensions_A42G_E4 · profile_type_A42G_E4 · Source: hairobotics.com A42</div>
+</div>
+
+<!-- TTP: A42X_E4 -->
+<div class="bc cat-ttp" data-cat="ttp" data-name="hai rttp a42x e4 xl wide">
+  <div class="bn">hai_RTTP_A42X_E4</div>
+  <div class="bm">Hai Robotics · TTP XL · VDA5050</div>
+  <div class="cap-grid cg3">
+    <div><div class="cl">Agent Class</div><div class="cv">AGV</div></div>
+    <div><div class="cl">Navigation</div><div class="cv" style="color:#f5c542;">Grid Nav (DM+Inertial)</div></div>
+    <div><div class="cl">End Effector</div><div class="cv">Fork / Tote Puller</div></div>
+    <div><div class="cl">VDA Protocol</div><div class="cv" style="color:var(--cyan);">✅ VDA5050</div></div>
+    <div><div class="cl">Dimensions (B×L)</div><div class="cv">1300 × 2190 mm</div></div>
+    <div><div class="cl">Bot Height</div><div class="cv">2000 mm</div></div>
+    <div><div class="cl">Bi-dir Movement</div><div class="cv" style="font-size:10px;">_05 Bi-dir + dest-check</div></div>
+    <div><div class="cl">Max Shelf Reach</div><div class="cv">5000 mm</div></div>
+    <div><div class="cl">Telescopic Reach</div><div class="cv">7000 mm</div></div>
+    <div><div class="cl">First Tray Height</div><div class="cv">350 mm</div></div>
+    <div><div class="cl">Case Payload</div><div class="cv" style="color:var(--yellow);">30 kg/case · up to 9 cases</div></div>
+    <div><div class="cl">Battery</div><div class="cv">LFP · Auto-charging</div></div>
+    <div><div class="cl">Certification</div><div class="cv">CE · NRTL</div></div>
+    <div><div class="cl">Obstacle Avoidance</div><div class="cv">Safety LiDAR (front+rear) · Obstacle detect · Anti-collision · E-stop</div></div>
+  </div>
+  <div class="sbw"><div class="sbl"><span>Travel Speed</span><span>1000 mm/s (wider footprint)</span></div><div class="sbb"><div class="sbf" style="width:25%;background:var(--ttp)"></div></div></div>
+  <div style="margin-top:7px;display:flex;flex-wrap:wrap;gap:3px;">
+    <span class="chip c-ttp">TTP</span><span class="chip c-agv">AGV</span><span class="chip c-grid">Grid Nav</span><span class="chip c-vda">VDA5050</span><span class="chip c-fork">Fork</span>
+  </div>
+  <div class="src" style="margin-top:5px;">butler_dimensions_A42X_E4 · profile_type_A42X_E4 · Source: hairobotics.com A42 (XL)</div>
+</div>
+
+<!-- TTP: A42TD_L_E1 -->
+<div class="bc cat-ttp" data-cat="ttp" data-name="hai rttp a42td l e1">
+  <div class="bn">hai_RTTP_A42TD_L_E1</div>
+  <div class="bm">Hai Robotics · TTP · VDA5050</div>
+  <div class="cap-grid cg3">
+    <div><div class="cl">Agent Class</div><div class="cv">AGV</div></div>
+    <div><div class="cl">Navigation</div><div class="cv" style="color:#f5c542;">Grid Nav (DM+Inertial)</div></div>
+    <div><div class="cl">End Effector</div><div class="cv">Fork / Tote Puller</div></div>
+    <div><div class="cl">VDA Protocol</div><div class="cv" style="color:var(--cyan);">✅ VDA5050</div></div>
+    <div><div class="cl">Dimensions (B×L)</div><div class="cv">1090 × 1910 mm</div></div>
+    <div><div class="cl">Bot Height</div><div class="cv">2000 mm</div></div>
+    <div><div class="cl">Bi-dir Movement</div><div class="cv" style="font-size:10px;">_05 Bi-dir + dest-check</div></div>
+    <div><div class="cl">Max Shelf Reach</div><div class="cv">5000 mm</div></div>
+    <div><div class="cl">Telescopic Reach</div><div class="cv">7000 mm</div></div>
+    <div><div class="cl">First Tray Height</div><div class="cv">350 mm</div></div>
+    <div><div class="cl">Case Payload</div><div class="cv" style="color:var(--yellow);">30 kg/case · up to 9 cases</div></div>
+    <div><div class="cl">Pick Height Range</div><div class="cv">up to 12000 mm (A42T)</div></div>
+    <div><div class="cl">Battery</div><div class="cv">LFP · Auto-charging</div></div>
+    <div><div class="cl">Certification</div><div class="cv">CE · NRTL</div></div>
+    <div><div class="cl">Obstacle Avoidance</div><div class="cv">Safety LiDAR (front+rear) · Anti-collision · E-stop</div></div>
+  </div>
+  <div class="sbw"><div class="sbl"><span>Travel Speed</span><span>1500 mm/s</span></div><div class="sbb"><div class="sbf" style="width:37.5%;background:var(--ttp)"></div></div></div>
+  <div style="margin-top:7px;display:flex;flex-wrap:wrap;gap:3px;">
+    <span class="chip c-ttp">TTP</span><span class="chip c-agv">AGV</span><span class="chip c-grid">Grid Nav</span><span class="chip c-vda">VDA5050</span><span class="chip c-fork">Fork</span>
+  </div>
+  <div class="src" style="margin-top:5px;">butler_dimensions_A42TD_L_E1 · profile_type_A42TD_L_E1 · Source: hairobotics.com A42T</div>
+</div>
+
+<!-- TTP: A42TL_E1 -->
+<div class="bc cat-ttp" data-cat="ttp" data-name="hai rttp a42tl e1">
+  <div class="bn">hai_RTTP_A42TL_E1</div>
+  <div class="bm">Hai Robotics · TTP · VDA5050</div>
+  <div class="cap-grid cg3">
+    <div><div class="cl">Agent Class</div><div class="cv">AGV</div></div>
+    <div><div class="cl">Navigation</div><div class="cv" style="color:#f5c542;">Grid Nav (DM+Inertial)</div></div>
+    <div><div class="cl">End Effector</div><div class="cv">Fork / Tote Puller</div></div>
+    <div><div class="cl">VDA Protocol</div><div class="cv" style="color:var(--cyan);">✅ VDA5050</div></div>
+    <div><div class="cl">Dimensions (B×L)</div><div class="cv">1090 × 1910 mm</div></div>
+    <div><div class="cl">Bot Height</div><div class="cv">2000 mm</div></div>
+    <div><div class="cl">Max Shelf Reach</div><div class="cv">5000 mm</div></div>
+    <div><div class="cl">Telescopic Reach</div><div class="cv">7000 mm</div></div>
+    <div><div class="cl">Accel</div><div class="cv">400 mm/s²</div></div>
+    <div><div class="cl">Case Payload</div><div class="cv" style="color:var(--yellow);">30 kg/case · up to 9 cases</div></div>
+    <div><div class="cl">Pick Height Range</div><div class="cv">up to 12000 mm (A42T)</div></div>
+    <div><div class="cl">Battery</div><div class="cv">LFP · Auto-charging</div></div>
+    <div><div class="cl">Certification</div><div class="cv">CE · NRTL</div></div>
+    <div><div class="cl">Obstacle Avoidance</div><div class="cv">Safety LiDAR (front+rear) · Anti-collision · E-stop</div></div>
+  </div>
+  <div class="sbw"><div class="sbl"><span>Travel Speed</span><span>1500 mm/s</span></div><div class="sbb"><div class="sbf" style="width:37.5%;background:var(--ttp)"></div></div></div>
+  <div style="margin-top:7px;display:flex;flex-wrap:wrap;gap:3px;">
+    <span class="chip c-ttp">TTP</span><span class="chip c-agv">AGV</span><span class="chip c-grid">Grid Nav</span><span class="chip c-vda">VDA5050</span><span class="chip c-fork">Fork</span>
+  </div>
+  <div class="src" style="margin-top:5px;">butler_dimensions_A42TL_E1 · profile_type_A42TL_E1 · Source: hairobotics.com A42T</div>
+</div>
+
+<!-- TTP: A42D_L_E4 -->
+<div class="bc cat-ttp" data-cat="ttp" data-name="hai rttp a42d l e4">
+  <div class="bn">hai_RTTP_A42D_L_E4</div>
+  <div class="bm">Hai Robotics · TTP · VDA5050</div>
+  <div class="cap-grid cg3">
+    <div><div class="cl">Agent Class</div><div class="cv">AGV</div></div>
+    <div><div class="cl">Navigation</div><div class="cv" style="color:#f5c542;">Grid Nav (DM+Inertial)</div></div>
+    <div><div class="cl">End Effector</div><div class="cv">Fork / Tote Puller</div></div>
+    <div><div class="cl">VDA Protocol</div><div class="cv" style="color:var(--cyan);">✅ VDA5050</div></div>
+    <div><div class="cl">Dimensions (B×L)</div><div class="cv">1120 × 1910 mm</div></div>
+    <div><div class="cl">Bot Height</div><div class="cv">2000 mm</div></div>
+    <div><div class="cl">Max Velocity</div><div class="cv">1600 mm/s</div></div>
+    <div><div class="cl">Accel</div><div class="cv">500 mm/s²</div></div>
+    <div><div class="cl">Max Shelf Reach</div><div class="cv">5000 mm</div></div>
+    <div><div class="cl">Telescopic Reach</div><div class="cv">7000 mm</div></div>
+    <div><div class="cl">Case Payload</div><div class="cv" style="color:var(--yellow);">30 kg/case · up to 9 cases</div></div>
+    <div><div class="cl">Pick Height Range</div><div class="cv">up to 12000 mm (A42T)</div></div>
+    <div><div class="cl">Battery</div><div class="cv">LFP · Auto-charging</div></div>
+    <div><div class="cl">Certification</div><div class="cv">CE · NRTL</div></div>
+    <div><div class="cl">Obstacle Avoidance</div><div class="cv">Safety LiDAR (front+rear) · Anti-collision · E-stop</div></div>
+  </div>
+  <div class="sbw"><div class="sbl"><span>Travel Speed</span><span>1600 mm/s · Accel: 500 mm/s²</span></div><div class="sbb"><div class="sbf" style="width:40%;background:var(--ttp)"></div></div></div>
+  <div style="margin-top:7px;display:flex;flex-wrap:wrap;gap:3px;">
+    <span class="chip c-ttp">TTP</span><span class="chip c-agv">AGV</span><span class="chip c-grid">Grid Nav</span><span class="chip c-vda">VDA5050</span><span class="chip c-fork">Fork</span>
+  </div>
+  <div class="src" style="margin-top:5px;">butler_dimensions_A42D_L_E4 · profile_type_A42D_L_E4 · Source: hairobotics.com A42T</div>
+</div>
+
+<!-- TTP: A42T_L_E1 -->
+<div class="bc cat-ttp" data-cat="ttp" data-name="hai rttp a42t l e1">
+  <div class="bn">hai_RTTP_A42T_L_E1</div>
+  <div class="bm">Hai Robotics · TTP · VDA5050</div>
+  <div class="cap-grid cg3">
+    <div><div class="cl">Agent Class</div><div class="cv">AGV</div></div>
+    <div><div class="cl">Navigation</div><div class="cv" style="color:#f5c542;">Grid Nav (DM+Inertial)</div></div>
+    <div><div class="cl">End Effector</div><div class="cv">Fork / Tote Puller</div></div>
+    <div><div class="cl">VDA Protocol</div><div class="cv" style="color:var(--cyan);">✅ VDA5050</div></div>
+    <div><div class="cl">Dimensions (B×L)</div><div class="cv">1090 × 1910 mm</div></div>
+    <div><div class="cl">Bot Height</div><div class="cv">2000 mm</div></div>
+    <div><div class="cl">Max Velocity</div><div class="cv">1500 mm/s</div></div>
+    <div><div class="cl">Accel</div><div class="cv">500 mm/s²</div></div>
+    <div><div class="cl">Max Shelf Reach</div><div class="cv">5000 mm</div></div>
+    <div><div class="cl">Telescopic Reach</div><div class="cv">7000 mm</div></div>
+    <div><div class="cl">Case Payload</div><div class="cv" style="color:var(--yellow);">30 kg/case · up to 9 cases</div></div>
+    <div><div class="cl">Pick Height Range</div><div class="cv">up to 12000 mm (A42T)</div></div>
+    <div><div class="cl">Battery</div><div class="cv">LFP · Auto-charging</div></div>
+    <div><div class="cl">Certification</div><div class="cv">CE · NRTL</div></div>
+    <div><div class="cl">Obstacle Avoidance</div><div class="cv">Safety LiDAR (front+rear) · Anti-collision · E-stop</div></div>
+  </div>
+  <div class="sbw"><div class="sbl"><span>Travel Speed</span><span>1500 mm/s · Accel: 500 mm/s²</span></div><div class="sbb"><div class="sbf" style="width:37.5%;background:var(--ttp)"></div></div></div>
+  <div style="margin-top:7px;display:flex;flex-wrap:wrap;gap:3px;">
+    <span class="chip c-ttp">TTP</span><span class="chip c-agv">AGV</span><span class="chip c-grid">Grid Nav</span><span class="chip c-vda">VDA5050</span><span class="chip c-fork">Fork</span>
+  </div>
+  <div class="src" style="margin-top:5px;">butler_dimensions_A42T_L_E1 · profile_type_A42T_L_E1 · Source: hairobotics.com A42T</div>
+</div>
+
+<!-- HTM: HTM_QT_M5F — FORK TYPE -->
+<div class="bc cat-htm" data-cat="htm" data-name="htm qt m5f quicktron fork horizontal tote mover">
+  <div class="bn">HTM_QT_M5F <span style="font-size:10px;color:var(--yellow);margin-left:6px;">★ Fork-pick type</span></div>
+  <div class="bm">Quicktron · HTM with Fork · VDA5050 · <em>HTM QT F</em></div>
+  <div class="cap-grid cg3">
+    <div><div class="cl">Agent Class</div><div class="cv">AGV</div></div>
+    <div><div class="cl">End Effector</div><div class="cv" style="color:var(--yellow);">Fork (horizontal, Electric Lift)</div></div>
+    <div><div class="cl">VDA Protocol</div><div class="cv" style="color:var(--cyan);">✅ VDA5050</div></div>
+    <div><div class="cl">Dimensions (L×B×H)</div><div class="cv">692 × 460 × 900 mm</div></div>
+    <div><div class="cl">Rotation Diameter</div><div class="cv">725 mm</div></div>
+    <div><div class="cl">Robot Weight</div><div class="cv">85 kg</div></div>
+    <div><div class="cl">Rated Load</div><div class="cv" style="color:var(--yellow);">30 kg</div></div>
+    <div><div class="cl">Lift Height Range</div><div class="cv">241–890 mm</div></div>
+    <div><div class="cl">Bi-dir Movement</div><div class="cv" style="font-size:10px;">_07 front-face / _08 slow</div></div>
+    <div><div class="cl">HW Max Velocity</div><div class="cv">4200 mm/s</div></div>
+    <div><div class="cl">sys.config Velocity</div><div class="cv">2000 mm/s (conservative)</div></div>
+    <div><div class="cl">Slow-dock Velocity</div><div class="cv" style="color:var(--yellow);">300 mm/s ★</div></div>
+    <div><div class="cl">Accel</div><div class="cv">2000 mm/s²</div></div>
+    <div><div class="cl">Fork Down (sys)</div><div class="cv">240 mm · Pick Offset: 50 mm</div></div>
+    <div><div class="cl">Battery</div><div class="cv">LFP 51.2V / 21 Ah</div></div>
+    <div><div class="cl">Runtime</div><div class="cv">&gt;12 h · Charge: &lt;1.5 h</div></div>
+    <div><div class="cl">Battery Cycles</div><div class="cv">2000 full cycles</div></div>
+    <div><div class="cl">Suited Bin</div><div class="cv">600 × 400 × 300 mm</div></div>
+    <div><div class="cl">Navigation</div><div class="cv" style="color:#f5c542;">Grid Nav (QR Code) · WiFi 5G 802.11b/g/n/a</div></div>
+    <div><div class="cl">Operating Temp</div><div class="cv">0–45 °C · ≤5% slope · ≤75 dB</div></div>
+  </div>
+  <div class="sbw"><div class="sbl"><span>Travel Speed</span><span>4200 mm/s HW max · 2000 mm/s sys.config (slow: 300)</span></div><div class="sbb"><div class="sbf" style="width:52.5%;background:var(--htm)"></div></div></div>
+  <div style="margin-top:7px;display:flex;flex-wrap:wrap;gap:3px;">
+    <span class="chip c-htm">HTM</span><span class="chip c-agv">AGV</span><span class="chip c-grid">Grid Nav</span><span class="chip c-vda">VDA5050</span>
+    <span class="chip c-fork">Fork</span>
+    <span style="display:inline-flex;align-items:center;gap:3px;font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px;background:#2a1e00;color:var(--yellow);">?FORK_ENABLED_BOTS</span>
+  </div>
+  <div class="src" style="margin-top:5px;">butler_dimensions_HTM_QT_M5F · profile_type_HTM_QT_M5F · vertical_movement_profile_map:htm_bot_maxdown_height=240mm · secondary_movement_profile_01 · Datasheet: HTM QT F</div>
+</div>
+
+<!-- HTM: hai_relay_K50 — CONVEYOR TYPE -->
+<div class="bc cat-htm" data-cat="htm" data-name="hai relay k50 conveyor transfer fastest">
+  <div class="bn">hai_relay_K50 <span style="font-size:10px;color:var(--orange);margin-left:6px;">⚡ Fastest bot</span></div>
+  <div class="bm">Hai Robotics · HTM Conveyor-transfer · VDA5050 · <em>HAI HTM H</em></div>
+  <div class="cap-grid cg3">
+    <div><div class="cl">Agent Class</div><div class="cv">AGV</div></div>
+    <div><div class="cl">End Effector</div><div class="cv">Conveyor Transfer (Electric Lift)</div></div>
+    <div><div class="cl">VDA Protocol</div><div class="cv" style="color:var(--cyan);">✅ VDA5050</div></div>
+    <div><div class="cl">Dimensions (L×B×H)</div><div class="cv">658 × 461 × 325 mm</div></div>
+    <div><div class="cl">Rotation Diameter</div><div class="cv">666 mm</div></div>
+    <div><div class="cl">Robot Weight</div><div class="cv">75 kg</div></div>
+    <div><div class="cl">Rated Load</div><div class="cv" style="color:var(--yellow);">50 kg</div></div>
+    <div><div class="cl">Lift Height</div><div class="cv">465 mm</div></div>
+    <div><div class="cl">Max Velocity</div><div class="cv" style="color:var(--orange);">4000 mm/s (≤4.0 m/s)</div></div>
+    <div><div class="cl">Slow-dock Velocity</div><div class="cv" style="color:var(--yellow);">300 mm/s ★</div></div>
+    <div><div class="cl">Accel</div><div class="cv">1800 mm/s²</div></div>
+    <div><div class="cl">Relay Height (sys)</div><div class="cv">310 mm</div></div>
+    <div><div class="cl">Battery</div><div class="cv">LTO 48V / 10 Ah</div></div>
+    <div><div class="cl">Charge Time</div><div class="cv">≤16 min (20→100%)</div></div>
+    <div><div class="cl">Battery Cycles</div><div class="cv">10,000 full cycles</div></div>
+    <div><div class="cl">Runtime</div><div class="cv">≥3.5 h at 30 kg</div></div>
+    <div><div class="cl">Navigation</div><div class="cv" style="color:#f5c542;">Grid Nav (QR+Inertial) · WiFi 5G 802.11b/g/n/a</div></div>
+    <div><div class="cl">Operating Temp</div><div class="cv">0–50 °C · ≤75 dB</div></div>
+    <div><div class="cl">Suited Bin</div><div class="cv">650 × 450 × 300 mm</div></div>
+  </div>
+  <div class="sbw"><div class="sbl"><span>Travel Speed</span><span>4000 mm/s ⚡ FASTEST (slow: 300)</span></div><div class="sbb"><div class="sbf" style="width:100%;background:linear-gradient(90deg,var(--htm),var(--yellow))"></div></div></div>
+  <div style="margin-top:7px;display:flex;flex-wrap:wrap;gap:3px;">
+    <span class="chip c-htm">HTM</span><span class="chip c-agv">AGV</span><span class="chip c-grid">Grid Nav</span><span class="chip c-vda">VDA5050</span><span class="chip c-conv">Conveyor</span>
+  </div>
+  <div class="src" style="margin-top:5px;">butler_dimensions_hai_relay_K50 · profile_type_hai_relay_K50 · secondary: 300mm/s · NOT in ?FORK_ENABLED_BOTS · Datasheet: HAI HTM H</div>
+</div>
+
+<!-- HTM: HTM_HAI_K50_L_E1 -->
+<div class="bc cat-htm" data-cat="htm" data-name="htm hai k50 l e1 conveyor underpass">
+  <div class="bn">HTM_HAI_K50_L_E1</div>
+  <div class="bm">Hai Robotics · HTM Conveyor-transfer · VDA5050</div>
+  <div class="cap-grid cg3">
+    <div><div class="cl">Agent Class</div><div class="cv">AGV</div></div>
+    <div><div class="cl">Navigation</div><div class="cv" style="color:#f5c542;">Grid Nav (QR+Inertial)</div></div>
+    <div><div class="cl">End Effector</div><div class="cv">Conveyor Transfer</div></div>
+    <div><div class="cl">VDA Protocol</div><div class="cv" style="color:var(--cyan);">✅ VDA5050</div></div>
+    <div><div class="cl">Dimensions (B×L)</div><div class="cv">520 × 713 mm</div></div>
+    <div><div class="cl">Height</div><div class="cv">459 mm</div></div>
+    <div><div class="cl">Bi-dir Movement</div><div class="cv" style="font-size:10px;">_07 front-face / _08 slow</div></div>
+    <div><div class="cl">Max Velocity</div><div class="cv">2000 mm/s</div></div>
+    <div><div class="cl">Slow-dock Velocity</div><div class="cv" style="color:var(--yellow);">1000 mm/s ★</div></div>
+    <div><div class="cl">Accel</div><div class="cv">1000 mm/s²</div></div>
+    <div><div class="cl">Relay Dock Height</div><div class="cv">446 mm</div></div>
+    <div><div class="cl">Conveyor Underpass</div><div class="cv" style="color:var(--cyan);">✅ Yes</div></div>
+    <div><div class="cl">Face at Relay</div><div class="cv">Back</div></div>
+  </div>
+  <div class="sbw"><div class="sbl"><span>Travel Speed</span><span>2000 mm/s (slow: 1000)</span></div><div class="sbb"><div class="sbf" style="width:50%;background:var(--htm)"></div></div></div>
+  <div style="margin-top:7px;display:flex;flex-wrap:wrap;gap:3px;">
+    <span class="chip c-htm">HTM</span><span class="chip c-agv">AGV</span><span class="chip c-grid">Grid Nav</span><span class="chip c-vda">VDA5050</span>
+    <span class="chip c-conv">Conveyor</span>
+    <span style="display:inline-flex;align-items:center;gap:3px;font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px;background:#0d2030;color:#7ab4fa;">Underpass</span>
+  </div>
+  <div class="src" style="margin-top:5px;">butler_dimensions_HTM_HAI_K50_L_E1 · secondary: 1000mm/s · ?CONVEYOR_UNDERPASS_BOTS</div>
+</div>
+
+<!-- HTM: HTM_HAI_K50_X_E1 -->
+<div class="bc cat-htm" data-cat="htm" data-name="htm hai k50 x e1 order bot wide conveyor underpass">
+  <div class="bn">HTM_HAI_K50_X_E1 <span style="font-size:10px;color:var(--green);margin-left:6px;">Order Bot</span></div>
+  <div class="bm">Hai Robotics · HTM Wide · VDA5050</div>
+  <div class="cap-grid cg3">
+    <div><div class="cl">Agent Class</div><div class="cv">AGV</div></div>
+    <div><div class="cl">Navigation</div><div class="cv" style="color:#f5c542;">Grid Nav (QR+Inertial)</div></div>
+    <div><div class="cl">End Effector</div><div class="cv">Conveyor Transfer</div></div>
+    <div><div class="cl">VDA Protocol</div><div class="cv" style="color:var(--cyan);">✅ VDA5050</div></div>
+    <div><div class="cl">Dimensions (B×L)</div><div class="cv">670 × 850 mm</div></div>
+    <div><div class="cl">Height</div><div class="cv">487 mm</div></div>
+    <div><div class="cl">Bi-dir Movement</div><div class="cv" style="font-size:10px;">_07 front-face / _08 slow</div></div>
+    <div><div class="cl">Max Velocity</div><div class="cv">2000 mm/s</div></div>
+    <div><div class="cl">Slow-dock Velocity</div><div class="cv" style="color:var(--yellow);">1000 mm/s ★</div></div>
+    <div><div class="cl">Accel</div><div class="cv">1000 mm/s²</div></div>
+    <div><div class="cl">Fork Down / Up</div><div class="cv">489 / 690 mm</div></div>
+    <div><div class="cl">Conveyor Underpass</div><div class="cv" style="color:var(--cyan);">✅ Yes</div></div>
+    <div><div class="cl">Order Bot</div><div class="cv" style="color:var(--green);">✅ Yes</div></div>
+  </div>
+  <div class="sbw"><div class="sbl"><span>Travel Speed</span><span>2000 mm/s (slow: 1000)</span></div><div class="sbb"><div class="sbf" style="width:50%;background:var(--htm)"></div></div></div>
+  <div style="margin-top:7px;display:flex;flex-wrap:wrap;gap:3px;">
+    <span class="chip c-htm">HTM</span><span class="chip c-agv">AGV</span><span class="chip c-grid">Grid Nav</span><span class="chip c-vda">VDA5050</span>
+    <span class="chip c-conv">Conveyor</span><span class="chip c-order">Order Bot</span>
+    <span style="display:inline-flex;align-items:center;gap:3px;font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px;background:#0d2030;color:#7ab4fa;">Underpass</span>
+  </div>
+  <div class="src" style="margin-top:5px;">butler_dimensions_HTM_HAI_K50_X_E1 · secondary: 1000mm/s · ?CONVEYOR_UNDERPASS_BOTS · ?HTM_ORDER_BOTS</div>
+</div>
+
+<!-- VTM: VTM_QT_C56_ST_2D -->
+<div class="bc cat-vtm" data-cat="vtm" data-name="vtm qt c56 st 2d tall 12m quicktron gripper double deep">
+  <div class="bn">VTM_QT_C56_ST_2D</div>
+  <div class="bm">Quicktron · VTM Tall · VDA5050 · <em>Single/Double deep Gripper (≤12m)</em></div>
+  <div class="cap-grid cg3">
+    <div><div class="cl">Agent Class</div><div class="cv">AGV</div></div>
+    <div><div class="cl">End Effector</div><div class="cv" style="color:var(--pink);">Mechanical Gripper</div></div>
+    <div><div class="cl">VDA Protocol</div><div class="cv" style="color:var(--cyan);">✅ VDA5050</div></div>
+    <div><div class="cl">Dimensions (L×W)</div><div class="cv">1780 × 1000 mm</div></div>
+    <div><div class="cl">Bot Height</div><div class="cv" style="color:var(--pink);">up to 12000 mm</div></div>
+    <div><div class="cl">Mech. Rot. Diameter</div><div class="cv">≤1950 mm</div></div>
+    <div><div class="cl">Robot Weight</div><div class="cv">~1000 kg (height-dependent)</div></div>
+    <div><div class="cl">Bi-dir Movement</div><div class="cv" style="font-size:10px;">_06 Bi-dir always-rotate</div></div>
+    <div><div class="cl">Travel Speed</div><div class="cv">1500 mm/s</div></div>
+    <div><div class="cl">Max Total Load</div><div class="cv" style="color:var(--yellow);">270 kg (30 kg/case, ≤50 kg at h≤8.3m)</div></div>
+    <div><div class="cl">Storage Depth</div><div class="cv">Double deep</div></div>
+    <div><div class="cl">Trays</div><div class="cv">6 (configurable 1–10)</div></div>
+    <div><div class="cl">1st Tray Height</div><div class="cv">494 mm · Spacing: 800 mm</div></div>
+    <div><div class="cl">Min Pick Height</div><div class="cv">320 mm · Max: 11540 mm</div></div>
+    <div><div class="cl">Case Dims L</div><div class="cv">300–650 mm</div></div>
+    <div><div class="cl">Case Dims W×H</div><div class="cv">200–450 × 150–400 mm</div></div>
+    <div><div class="cl">Navigation</div><div class="cv" style="color:#f5c542;">Grid Nav (QR Code floor · ±10mm)</div></div>
+    <div><div class="cl">Obstacle Avoidance</div><div class="cv">Safety LiDAR · Brake ≤2.25 m · E-stop</div></div>
+    <div><div class="cl">Battery</div><div class="cv">LFP 48V / 42 Ah · 2000 cycles</div></div>
+    <div><div class="cl">Ground Flatness</div><div class="cv">±5.5 mm/2m² (h&gt;8m); ±4.4 (h≤8m)</div></div>
+    <div><div class="cl">Operating Temp</div><div class="cv">0–45 °C · 10–90% RH · &lt;3° slope</div></div>
+  </div>
+  <div class="sbw"><div class="sbl"><span>Travel Speed</span><span>1500 mm/s · Height: 12m · Double deep gripper</span></div><div class="sbb"><div class="sbf" style="width:37.5%;background:var(--vtm)"></div></div></div>
+  <div style="margin-top:7px;display:flex;flex-wrap:wrap;gap:3px;">
+    <span class="chip c-vtm">VTM</span><span class="chip c-agv">AGV</span><span class="chip c-grid">Grid Nav</span><span class="chip c-vda">VDA5050</span>
+    <span style="display:inline-flex;align-items:center;gap:3px;font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px;background:#2d1045;color:var(--pink);">Gripper</span>
+  </div>
+  <div class="src" style="margin-top:5px;">butler_dimensions_VTM_QT_C56_ST_2D · profile_type_VTM_QT_C56_ST_2D · ?FORK_ENABLED_BOTS · Datasheet: QT VTM Single/Double deep Gripper ≤12m</div>
+</div>
+
+<!-- VTM: VTM_QT_C56_S_2D -->
+<div class="bc cat-vtm" data-cat="vtm" data-name="vtm qt c56 s 2d quicktron telescopic gripper double deep">
+  <div class="bn">VTM_QT_C56_S_2D</div>
+  <div class="bm">Quicktron · VTM Standard · VDA5050 · <em>C56 BD1 (7m Telescopic)</em></div>
+  <div class="cap-grid cg3">
+    <div><div class="cl">Agent Class</div><div class="cv">AGV</div></div>
+    <div><div class="cl">End Effector</div><div class="cv" style="color:var(--pink);">Telescopic Gripper</div></div>
+    <div><div class="cl">VDA Protocol</div><div class="cv" style="color:var(--cyan);">✅ VDA5050</div></div>
+    <div><div class="cl">Dimensions (L×W)</div><div class="cv">1780 × 1000 mm</div></div>
+    <div><div class="cl">Bot Height</div><div class="cv">7000 mm</div></div>
+    <div><div class="cl">Bi-dir Movement</div><div class="cv" style="font-size:10px;">_06 Bi-dir always-rotate</div></div>
+    <div><div class="cl">Max Velocity</div><div class="cv">1800 mm/s</div></div>
+    <div><div class="cl">Storage Depth</div><div class="cv">Double deep (Telescopic)</div></div>
+    <div><div class="cl">Max Case Payload</div><div class="cv" style="color:var(--yellow);">50 kg/case</div></div>
+    <div><div class="cl">Case Size L</div><div class="cv">300–650 mm</div></div>
+    <div><div class="cl">Case Size W×H</div><div class="cv">200–450 × 150–400 mm</div></div>
+    <div><div class="cl">Navigation</div><div class="cv" style="color:#f5c542;">Grid Nav (QR Code floor · ±10mm)</div></div>
+    <div><div class="cl">Obstacle Avoidance</div><div class="cv">Safety LiDAR · Brake ≤2.25 m · E-stop</div></div>
+    <div><div class="cl">Battery Runtime</div><div class="cv">6–8 h · LFP</div></div>
+  </div>
+  <div class="sbw"><div class="sbl"><span>Travel Speed</span><span>1800 mm/s · Height: 7m · Double deep Telescopic Gripper</span></div><div class="sbb"><div class="sbf" style="width:45%;background:var(--vtm)"></div></div></div>
+  <div style="margin-top:7px;display:flex;flex-wrap:wrap;gap:3px;">
+    <span class="chip c-vtm">VTM</span><span class="chip c-agv">AGV</span><span class="chip c-grid">Grid Nav</span><span class="chip c-vda">VDA5050</span>
+    <span style="display:inline-flex;align-items:center;gap:3px;font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px;background:#2d1045;color:var(--pink);">Gripper</span>
+  </div>
+  <div class="src" style="margin-top:5px;">butler_dimensions_VTM_QT_C56_S_2D · profile_type_VTM_QT_C56_S_2D · Source: quicktron.com C56A(S)-BD1</div>
+</div>
+
+<!-- VTM: VTM_QT_C56_GT_2D -->
+<div class="bc cat-vtm" data-cat="vtm" data-name="vtm qt c56 gt 2d tall 12m quicktron gripper single deep plus">
+  <div class="bn">VTM_QT_C56_GT_2D</div>
+  <div class="bm">Quicktron · VTM Tall G-series · VDA5050 · <em>Single deep Gripper Plus</em></div>
+  <div class="cap-grid cg3">
+    <div><div class="cl">Agent Class</div><div class="cv">AGV</div></div>
+    <div><div class="cl">End Effector</div><div class="cv" style="color:var(--pink);">Mechanical Gripper (Plus)</div></div>
+    <div><div class="cl">VDA Protocol</div><div class="cv" style="color:var(--cyan);">✅ VDA5050</div></div>
+    <div><div class="cl">Dimensions (L×W)</div><div class="cv">2010 × 1120 mm</div></div>
+    <div><div class="cl">Bot Height</div><div class="cv" style="color:var(--pink);">up to 12000 mm</div></div>
+    <div><div class="cl">Mech. Rot. Diameter</div><div class="cv">≤2220 mm</div></div>
+    <div><div class="cl">Robot Weight</div><div class="cv">~1050 kg (height-dependent)</div></div>
+    <div><div class="cl">Bi-dir Movement</div><div class="cv" style="font-size:10px;">_06 Bi-dir always-rotate</div></div>
+    <div><div class="cl">Travel Speed</div><div class="cv">1500 mm/s</div></div>
+    <div><div class="cl">Max Total Load</div><div class="cv" style="color:var(--yellow);">270 kg (30 kg/case, ≤50 kg at h≤8.3m)</div></div>
+    <div><div class="cl">Storage Depth</div><div class="cv">Single deep (Gripper Plus wider reach)</div></div>
+    <div><div class="cl">Trays</div><div class="cv">6 (configurable 1–10)</div></div>
+    <div><div class="cl">1st Tray Height</div><div class="cv">494 mm · Spacing: 800 mm</div></div>
+    <div><div class="cl">Min Pick Height</div><div class="cv">320 mm · Max: 11540 mm</div></div>
+    <div><div class="cl">Case Dims L</div><div class="cv">300–800 mm (wider than Std)</div></div>
+    <div><div class="cl">Case Dims W×H</div><div class="cv">300–600 × 150–400 mm</div></div>
+    <div><div class="cl">Navigation</div><div class="cv" style="color:#f5c542;">Grid Nav (QR Code floor · ±10mm)</div></div>
+    <div><div class="cl">Obstacle Avoidance</div><div class="cv">Safety LiDAR · Brake ≤2.25 m · E-stop</div></div>
+    <div><div class="cl">Battery</div><div class="cv">LFP 48V / 42 Ah · 2000 cycles</div></div>
+    <div><div class="cl">Operating Temp</div><div class="cv">0–45 °C · 10–90% RH · &lt;3° slope</div></div>
+  </div>
+  <div class="sbw"><div class="sbl"><span>Travel Speed</span><span>1500 mm/s · Height: 12m · Single deep Gripper Plus</span></div><div class="sbb"><div class="sbf" style="width:37.5%;background:var(--vtm)"></div></div></div>
+  <div style="margin-top:7px;display:flex;flex-wrap:wrap;gap:3px;">
+    <span class="chip c-vtm">VTM</span><span class="chip c-agv">AGV</span><span class="chip c-grid">Grid Nav</span><span class="chip c-vda">VDA5050</span>
+    <span style="display:inline-flex;align-items:center;gap:3px;font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px;background:#2d1045;color:var(--pink);">Gripper Plus</span>
+  </div>
+  <div class="src" style="margin-top:5px;">butler_dimensions_VTM_QT_C56_GT_2D · profile_type_VTM_QT_C56_GT_2D · Datasheet: QT VTM Single deep Gripper Plus</div>
+</div>
+
+<!-- VTM: VTM_QT_C56_G_2D -->
+<div class="bc cat-vtm" data-cat="vtm" data-name="vtm qt c56 g 2d quicktron vacuum gripper">
+  <div class="bn">VTM_QT_C56_G_2D</div>
+  <div class="bm">Quicktron · VTM G-series · VDA5050 · <em>C56 BX1 (7m Vacuum)</em></div>
+  <div class="cap-grid cg3">
+    <div><div class="cl">Agent Class</div><div class="cv">AGV</div></div>
+    <div><div class="cl">End Effector</div><div class="cv" style="color:var(--pink);">Vacuum Gripper</div></div>
+    <div><div class="cl">VDA Protocol</div><div class="cv" style="color:var(--cyan);">✅ VDA5050</div></div>
+    <div><div class="cl">Dimensions (L×W)</div><div class="cv">~2010 × 1120 mm (G-series)</div></div>
+    <div><div class="cl">Bot Height</div><div class="cv">7000 mm</div></div>
+    <div><div class="cl">Bi-dir Movement</div><div class="cv" style="font-size:10px;">_06 Bi-dir always-rotate</div></div>
+    <div><div class="cl">Max Velocity</div><div class="cv">1800 mm/s</div></div>
+    <div><div class="cl">Storage Depth</div><div class="cv">Single deep (Vacuum)</div></div>
+    <div><div class="cl">Max Case Payload</div><div class="cv" style="color:var(--yellow);">30 kg/case</div></div>
+    <div><div class="cl">Navigation</div><div class="cv" style="color:#f5c542;">Grid Nav (QR Code floor · ±10mm)</div></div>
+    <div><div class="cl">Obstacle Avoidance</div><div class="cv">Safety LiDAR · Brake ≤2.25 m · E-stop</div></div>
+    <div><div class="cl">Battery Runtime</div><div class="cv">6–8 h · LFP</div></div>
+  </div>
+  <div class="sbw"><div class="sbl"><span>Travel Speed</span><span>1800 mm/s · Height: 7m · Vacuum Gripper (single deep)</span></div><div class="sbb"><div class="sbf" style="width:45%;background:var(--vtm)"></div></div></div>
+  <div style="margin-top:7px;display:flex;flex-wrap:wrap;gap:3px;">
+    <span class="chip c-vtm">VTM</span><span class="chip c-agv">AGV</span><span class="chip c-grid">Grid Nav</span><span class="chip c-vda">VDA5050</span>
+    <span style="display:inline-flex;align-items:center;gap:3px;font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px;background:#2d1045;color:var(--pink);">Vacuum</span>
+  </div>
+  <div class="src" style="margin-top:5px;">butler_dimensions_VTM_QT_C56_G_2D · profile_type_VTM_QT_C56_G_2D · Source: quicktron.com C56A(S)-BX1</div>
+</div>
+
+<!-- VTM: VTM_HAI_A42_TDV_E1 -->
+<div class="bc cat-vtm" data-cat="vtm" data-name="vtm hai a42 tdv e1 6.8m hai robotics">
+  <div class="bn">VTM_HAI_A42_TDV_E1</div>
+  <div class="bm">Hai Robotics · VTM · VDA5050 · <em>A42T(D)-E1 / A42T-L-E2-H</em></div>
+  <div class="cap-grid cg3">
+    <div><div class="cl">Agent Class</div><div class="cv">AGV</div></div>
+    <div><div class="cl">End Effector</div><div class="cv">Vertical Fork + 2D/3D Vision</div></div>
+    <div><div class="cl">VDA Protocol</div><div class="cv" style="color:var(--cyan);">✅ VDA5050</div></div>
+    <div><div class="cl">Dimensions (L×W)</div><div class="cv">1850 × 1030 mm</div></div>
+    <div><div class="cl">Bot Height</div><div class="cv">6800 mm (12m variant)</div></div>
+    <div><div class="cl">Mech. Rot. Diameter</div><div class="cv">1850–2245 mm</div></div>
+    <div><div class="cl">Bi-dir Movement</div><div class="cv" style="font-size:10px;">_06 Bi-dir always-rotate</div></div>
+    <div><div class="cl">Travel Speed</div><div class="cv">1500 mm/s</div></div>
+    <div><div class="cl">Max Total Load</div><div class="cv" style="color:var(--yellow);">270 kg (30 kg/case)</div></div>
+    <div><div class="cl">Trays</div><div class="cv">8 · 1st tray: 750 mm · Spacing: 450 mm</div></div>
+    <div><div class="cl">Storage Depth</div><div class="cv">Double deep</div></div>
+    <div><div class="cl">Min Pick Height</div><div class="cv">350 mm · Max: 8/10/12 m</div></div>
+    <div><div class="cl">Fork Arm Height</div><div class="cv">215 mm · Finger: 110 mm</div></div>
+    <div><div class="cl">Navigation</div><div class="cv" style="color:#f5c542;">Grid Nav (DM+Inertial)</div></div>
+    <div><div class="cl">Obstacle Avoidance</div><div class="cv">Safety LiDAR front + rear · Brake ≤1 m · E-stop</div></div>
+    <div><div class="cl">Battery</div><div class="cv">LFP · Cycle life ≥3000</div></div>
+    <div><div class="cl">Operating Temp</div><div class="cv">0–45 °C · 5–95% RH · ≤2° slope</div></div>
+    <div><div class="cl">E2-H variant</div><div class="cv">Telescopic tray · 240 kg · Single/Double</div></div>
+  </div>
+  <div class="sbw"><div class="sbl"><span>Travel Speed</span><span>1500 mm/s · Height: 6.8–12m · Telescopic reach: 12m</span></div><div class="sbb"><div class="sbf" style="width:37.5%;background:var(--vtm)"></div></div></div>
+  <div style="margin-top:7px;display:flex;flex-wrap:wrap;gap:3px;">
+    <span class="chip c-vtm">VTM</span><span class="chip c-agv">AGV</span><span class="chip c-grid">Grid Nav</span><span class="chip c-vda">VDA5050</span><span class="chip c-fork">Fork</span>
+  </div>
+  <div class="src" style="margin-top:5px;">butler_dimensions_VTM_HAI_A42_TDV_E1 · bot_max_height_telescopic=12000mm · ?FORK_ENABLED_BOTS · Datasheets: A42T(D)-E1, A42T-L-E2-H</div>
+</div>
+
+  </div><!-- /botGrid -->
+
+  <div class="card" style="margin-top:16px;">
+    <div class="card-title">Capability Matrix — All Bot Categories <span class="src">Verified against Highspot datasheets: Ranger™ RTP M 3.0 · HAI HTM H · HTM QT F · A42T(D)-E1 · A42T-L-E2-H · QT VTM Single/Double deep Gripper · QT VTM Single deep Gripper Plus</span></div>
+    <table>
+      <thead>
+        <tr><th>Capability Dimension</th><th style="color:var(--rtp)">RTP (7)</th><th style="color:var(--ttp)">TTP (8)</th><th style="color:var(--htm)">HTM (4)</th><th style="color:var(--vtm)">VTM (5)</th><th>Source</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Agent Class</strong><i class="tip-i" data-tip="AGV = Automated Guided Vehicle. All bots here require fixed floor QR or DM code marker installation for localization. True AMRs navigate freely without any floor infrastructure.">i</i></td><td>AGV (all) — QR code floor infrastructure required</td><td>AGV (all)</td><td>AGV (all)</td><td>AGV (all)</td><td>Grid-nav bots require fixed floor marker installation (QR/DM codes); classified as AGV not AMR</td></tr>
+        <tr><td><strong>Navigation Class</strong><i class="tip-i" data-tip="How the bot determines its position on the warehouse floor. Grid Nav (QR): reads QR code tiles embedded in the floor (±10 mm accuracy). Grid Nav (DM+Inertial): reads DataMatrix codes combined with wheel odometry for position fusing.">i</i></td>
+          <td><span style="color:#f5c542;font-weight:700;">Grid Nav</span> — QR code floor markers (all: GO Butler 1.5/2.0/2.1/XL/RangerGTP · QT M100/M60/H80/M100C)</td>
+          <td><span style="color:#f5c542;font-weight:700;">Grid Nav</span> — Inertial + DM code visual markers (all HAI A42/A42T variants)</td>
+          <td><span style="color:#f5c542;font-weight:700;">Grid Nav</span> — QR code floor + Inertial odometry (all variants)</td>
+          <td><span style="color:#f5c542;font-weight:700;">Grid Nav</span> — DM code + Inertial (HAI A42T VTM) · QR code floor (QT C56 variants)</td>
+          <td>SLAM = markerless, free-form nav. Grid = requires floor QR/DM marker installation</td>
+        </tr>
+        <tr><td><strong>End Effector</strong><i class="tip-i" data-tip="The mechanism used to interact with loads. Rack Lift: electromagnetic plate raises the entire rack beneath the bot. Fork: telescopic arm retrieves individual totes from racking levels. Gripper/Vacuum: mechanical or suction-based case picking.">i</i></td><td>Rack Lift (electromagnetic plate · 60 mm lift · QT variants)</td><td>Fork / Tote Puller (telescopic) · CE+NRTL certified</td><td>Fork <em>or</em> Conveyor Transfer — see per-bot</td><td>Vertical Fork (HAI) · Telescopic Gripper (QT ST/Standard) · Vacuum Gripper (QT G-series)</td><td><code>?FORK_ENABLED_BOTS</code> gmc.hrl</td></tr>
+        <tr><td><strong>Rated Payload</strong><i class="tip-i" data-tip="Maximum certified carrying capacity (kg). Exceeding this triggers an E-stop or voids the manufacturer warranty. For rack-lift bots: includes rack frame weight (~100 kg).">i</i></td><td>600 kg (RTP M 3.0) · 1000 kg (M100/M100C) · 800 kg (H80D_XH) · 600 kg (M60)</td><td>30 kg/case · up to 9 cases simultaneously</td><td>30 kg (HTM_QT_M5F) · 50 kg (hai_relay_K50)</td><td>270 kg total / 30 kg per case (QT &amp; HAI)</td><td>Highspot datasheets · quicktron.com · hairobotics.com</td></tr>
+        <tr><td><strong>Fork / Lift Capability</strong><i class="tip-i" data-tip="Vertical range and speed of the fork or lift mechanism. Determines which racking heights this bot can service and the pick cycle time contribution from vertical movement.">i</i></td><td>❌ Rack lift only, no tote-level pick</td><td>✅ Multi-level: 350mm–5000mm (7000mm telescopic). Fork vel: 0.55 mm/ms</td><td>HTM_QT_M5F: down=240mm (hw: 241–890mm), offset=50mm. Others: conveyor handoff height (310–489mm)</td><td>HAI: 350mm–12000mm, Fork+2D+3D. QT: 320–11540mm, Mechanical Gripper</td><td>sys.config: <code>vertical_movement_profile_map</code> · Datasheets</td></tr>
+        <tr><td><strong>Battery Type</strong><i class="tip-i" data-tip="Battery chemistry affects charge time, cycle life, and safety. LFP (Lithium Iron Phosphate): safe, 3 000+ cycles, standard. LTO (Lithium Titanate): 16-min fast charge, 10 000+ cycles, lower energy density. Li-ion: higher energy density, shorter cycle life.">i</i></td><td>Li-ion 52V/40Ah (RTP M 3.0) · LFP (QT variants)</td><td>LFP · Auto-charging (all HAI A42 family)</td><td>LTO 48V/10Ah (hai_relay_K50 · 16min charge · 10k cycles) · LFP 51.2V/21Ah (HTM_QT_M5F · 2000 cycles)</td><td>LFP (HAI ≥3000 cycles) · LFP 48V/42Ah (QT · 2000 cycles)</td><td>Highspot datasheets · hairobotics.com · quicktron.com</td></tr>
+        <tr><td><strong>Typical Runtime</strong><i class="tip-i" data-tip="Estimated operating time per charge cycle under normal warehouse load. Actual runtime varies with payload weight, travel distance, and ambient temperature.">i</i></td><td>12–14 h (RTP M 3.0) · 7.5 h (M100) · 9 h (M60) · &gt;8 h (H80)</td><td>—</td><td>≥3.5 h at 30kg (hai_relay_K50) · &gt;12 h (HTM_QT_M5F)</td><td>6–8 h (QT C56 variants)</td><td>Highspot datasheets · quicktron.com</td></tr>
+        <tr><td><strong>Navigation System</strong><i class="tip-i" data-tip="Specific navigation technology deployed. Proprietary (GO): GreyOrange-only QR grid, non-VDA. QR code grid (QT): open QR marker tiles, ±10 mm, VDA5050. DM+Inertial (HAI): DataMatrix visual markers fused with wheel odometry.">i</i></td><td>Proprietary (GO) · QR code grid ±10mm (QT: M100/M60/H80)</td><td>Inertial + visual markers (Hai A42 family) · CE+NRTL certified</td><td>QR Code + Inertial (all variants)</td><td>Inertial + DM code (HAI) · QR Code floor grid (QT)</td><td>Datasheets · quicktron.com · sys.config</td></tr>
+        <tr><td><strong>Storage Depth</strong><i class="tip-i" data-tip="Single deep: one tote per pick face per aisle. Double deep: two totes stacked per face — needs telescopic reach, reduces required aisle count by ~30% but adds sequence dependency (outer tote must be moved to reach inner).">i</i></td><td>N/A (whole rack)</td><td>Single deep (fork extends per level)</td><td>N/A</td><td>Double deep (A42T-D-E1 · QT ST_2D) · Single or Double (A42T-L-E2-H) · Single (QT GT_2D Gripper Plus)</td><td>Datasheets</td></tr>
+        <tr><td><strong>VDA5050 Protocol</strong><i class="tip-i" data-tip="VDA5050 is the open ISO standard for AGV/AMR fleet communication with WCS/WMS. Non-VDA bots require GreyOrange proprietary integration and cannot be orchestrated by third-party fleet managers.">i</i></td><td>❌ GO bots: proprietary.<br>✅ Quicktron variants: M100, M60, H80D_XH, M100C_C</td><td>✅ All 8 variants</td><td>✅ All 4 variants</td><td>✅ All 5 variants</td><td><code>?VDA_PROTO_BOTS</code> gmc.hrl · sys.config:butler_type</td></tr>
+        <tr><td><strong>Bi-directional Movement</strong><i class="tip-i" data-tip="Movement profile code controlling direction-change behavior. _01: front-face only. _02: bi-dir, rotates at junctions. _04: back-face. _05: bi-dir + destination-orientation check both ways + rotate-after-rotate. _06: bi-dir + always rotates before moving. _07/_08: primary/secondary slow profiles.">i</i></td><td>_01 (front-face, QT) or _02 (bi-dir, GO) or _04 (back-face, CleanZone)</td><td>_05 (bi-dir + dest-orient check both ways + rotate_after_rotate)</td><td>_07 primary (front-face + dest-check) / _08 slow secondary (back-face)</td><td>_06 (bi-dir + always rotate_after_rotate)</td><td>sys.config: <code>bi_directional_movement</code> in <code>butler_type</code></td></tr>
+        <tr><td><strong>Secondary Velocity Profile</strong><i class="tip-i" data-tip="A reduced-speed movement profile for precision docking (e.g. final approach to a conveyor or relay station). Only HTM bots currently use this — allows slow, accurate alignment independent of normal travel speed.">i</i></td><td>❌ Single profile</td><td>❌ Single profile</td><td>✅ All HTM bots: slow-docking profile. HTM_QT_M5F/hai_relay_K50: 300 mm/s. K50_L/X_E1: 1000 mm/s</td><td>❌ Single profile</td><td>sys.config: <code>secondary_movement_profile</code> in <code>butler_type</code></td></tr>
+        <tr><td><strong>Obstacle Avoidance</strong><i class="tip-i" data-tip="Safety systems that detect and stop the bot before obstacles. Safety LiDAR: IEC 61496-certified laser scanner (front + rear on most bots). Brake distance: maximum stopping distance from max speed upon obstacle detection. E-stop: cuts drive power immediately.">i</i></td><td>Safety LiDAR (all GO bots: front+rear) · Safety LiDAR (QT bots) · E-stop on all</td><td>Safety LiDAR front + rear · Obstacle detection · Anti-collision system · E-stop (all HAI A42/A42T)</td><td>Laser Scanner + Safety Edge (all) · CE certified</td><td>LiDAR front + rear (HAI · brake ≤1m) · LiDAR (QT · brake ≤2.25m)</td><td>Datasheets · hairobotics.com · quicktron.com</td></tr>
+        <tr><td><strong>Operating Temperature</strong><i class="tip-i" data-tip="Ambient temperature and humidity range for safe, certified operation. Most bots require ≥ 0 °C — critical for cold-chain or deep-freeze warehouse deployments. Exceeding limits triggers thermal shutdown.">i</i></td><td>0–45 °C (RTP M 3.0)</td><td>—</td><td>0–50 °C (hai_relay_K50) · 0–45 °C (HTM_QT_M5F)</td><td>0–45 °C (all VTM variants)</td><td>Datasheets</td></tr>
+        <tr><td><strong>Conveyor Underpass</strong><i class="tip-i" data-tip="Whether the bot can travel beneath an elevated conveyor line. Requires robot body height ≤ conveyor underside clearance. Only specific HTM K50 variants are designed for this.">i</i></td><td>❌</td><td>❌</td><td>K50_L_E1, K50_X_E1 only</td><td>❌</td><td><code>?CONVEYOR_UNDERPASS_BOTS</code></td></tr>
+        <tr><td><strong>Order Bot (relay)</strong><i class="tip-i" data-tip="A bot configured to carry a partial-order rack alongside a picker, then hand off to a relay station. Used in goods-to-person relay wave strategies. Only HTM_HAI_K50_X_E1 currently supports this mode.">i</i></td><td>❌</td><td>❌</td><td>HTM_HAI_K50_X_E1 only</td><td>❌</td><td><code>?HTM_ORDER_BOTS</code></td></tr>
+        <tr><td><strong>Lane Count Multiplier</strong><i class="tip-i" data-tip="Whether throughput calculations for this bot type apply a lane-count multiplier. Affects capacity planning models and station sizing. RTP bots use it (multiple concurrent rack lanes); TTP/HTM/VTM do not.">i</i></td><td>✅ true</td><td>❌ false</td><td>❌ false</td><td>❌ false</td><td>sys.config: <code>use_lane_count_multiplier</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Bi-directional Movement Profile Reference <span class="src">sys.config: bi_directional_movement definitions</span></div>
+    <table>
+      <thead><tr><th>Profile ID</th><th>Moving Face</th><th>Lift-up allowed</th><th>Dest Orient Check (up/down)</th><th>Rotate-after-rotate</th><th>Used by</th></tr></thead>
+      <tbody>
+        <tr><td><code>_01</code></td><td>front_face</td><td>❌</td><td>false / true</td><td>always</td><td>Quicktron RTP (M100, M60, H80D, M100C)</td></tr>
+        <tr><td><code>_02</code></td><td>either</td><td>✅</td><td>false / true</td><td>false</td><td>GO RTP (1.5, 2.0, 2.1, XL, XL1.1, RangerGTP, M3.0_CE)</td></tr>
+        <tr><td><code>_04</code></td><td>back_face</td><td>❌</td><td>false / false</td><td>false</td><td>Butler CleanZone, butlersafetyranger3</td></tr>
+        <tr><td><code>_05</code></td><td>either</td><td>✅</td><td>true / true</td><td>true</td><td>All TTP (hai_RTTP_A42*)</td></tr>
+        <tr><td><code>_06</code></td><td>either</td><td>✅</td><td>true / true</td><td>always</td><td>All VTM</td></tr>
+        <tr><td><code>_07</code></td><td>front_face</td><td>❌</td><td>true / true</td><td>always</td><td>All HTM (primary)</td></tr>
+        <tr><td><code>_08</code></td><td>back_face</td><td>❌</td><td>true / true</td><td>always</td><td>All HTM (secondary slow-dock)</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══ TAB 2: TASK TAXONOMY ═══ -->
+<div id="tab-tasks" class="content">
+
+  <div class="card">
+    <div class="card-title">All Task Types — Full System View <span class="src">butler_manager_utils.erl · relay_pps_subtasks.erl · ttp_bot_manager_utils.erl · vtm_bot_manager_utils.erl</span></div>
+    <div class="info" style="margin-bottom:10px;">ℹ️ Each bot category uses <strong>different source modules</strong> and <strong>different task hierarchies</strong>. TTP and VTM both use a two-level parent→child task model. RTP and HTM use flat task types. All share <code>goto_barcode</code> as the universal navigation primitive. Scheduler: <code>gmc_ttp_task_manager.erl</code> handles TTP+VTM; <code>butler_manager.erl</code> handles RTP; relay tasks handled by <code>relay_pps_subtasks.erl</code>.</div>
+    <table>
+      <thead><tr><th>Task Type</th><th>Level</th><th>Direction / Purpose</th><th>Bot</th><th>Statuses</th><th>Source Module</th></tr></thead>
+      <tbody>
+        <tr style="background:rgba(91,124,250,0.05)"><td><code>picktask</code></td><td>Top-level</td><td>Pick rack → PPS operator pick → Store rack</td><td><span class="chip c-rtp">RTP</span></td><td>pending · plc_available · rack_picked · pps_control · pps_complete · storing</td><td><code>butler_manager_utils.erl · create_pick_or_audit_..._subtasks/8</code></td></tr>
+        <tr style="background:rgba(91,124,250,0.05)"><td><code>store_task</code></td><td>Top-level</td><td>Navigate to storage slot and deposit rack</td><td><span class="chip c-rtp">RTP</span></td><td>assigned · storing · complete</td><td><code>butler_manager_utils.erl · create_goto_store_subtasks/3</code></td></tr>
+        <tr style="background:rgba(250,140,59,0.05)"><td><code>relay_to_pps</code></td><td>Top-level</td><td>Relay storable → PPS (outbound tote)</td><td><span class="chip c-htm">HTM</span></td><td>assigned · tote_picked · reached_liftup · pps_control · going_to_liftdown · going_to_exit_queue · storing · tote_dropped</td><td><code>relay_pps_subtasks.erl:subtask_list/5,6</code></td></tr>
+        <tr style="background:rgba(250,140,59,0.05)"><td><code>pps_to_relay</code></td><td>Top-level</td><td>PPS → Relay storable (inbound tote)</td><td><span class="chip c-htm">HTM</span></td><td>assigned · tote_picked · storing</td><td><code>relay_pps_subtasks.erl:subtask_list_pps_to_relay/5</code></td></tr>
+        <tr style="background:rgba(250,140,59,0.05)"><td><code>relay_to_conveyor</code></td><td>Top-level</td><td>Relay → EasyLoop conveyor (outbound)</td><td><span class="chip c-htm">HTM</span></td><td>assigned · tote_picked · reached_liftup · going_to_conveyor · tote_dropped</td><td><code>relay_pps_subtasks.erl:2364</code></td></tr>
+        <tr style="background:rgba(250,140,59,0.05)"><td><code>conveyor_to_block</code></td><td>Top-level</td><td>Conveyor → Block staging</td><td><span class="chip c-htm">HTM</span></td><td>assigned · tote_picked · reached_waiting_block</td><td><code>relay_pps_subtasks.erl:3130</code></td></tr>
+        <tr style="background:rgba(250,140,59,0.05)"><td><code>block_to_queue</code></td><td>Top-level</td><td>Block → Queue exit</td><td><span class="chip c-htm">HTM</span></td><td>assigned · tote_picked · going_to_queue · reached_exit_point</td><td><code>relay_pps_subtasks.erl:3225</code></td></tr>
+        <tr style="background:rgba(250,140,59,0.05)"><td><code>bot_transport</code></td><td>Top-level</td><td>Reposition / inter-station move</td><td>All</td><td>assigned · complete</td><td><code>bot_transport_subtasks.erl:290</code></td></tr>
+        <tr style="background:rgba(61,214,140,0.05)"><td><code>rangergrouptask</code></td><td><strong>Parent</strong></td><td>Group container for TTP tote-move operations</td><td><span class="chip c-ttp">TTP</span></td><td>loading_from_storable · loading_from_conveyor · unloading_at_storable · unloading_at_conveyor · loading_from_store · complete</td><td><code>gmc_ttp_task_manager.erl · rgt_subtasks.erl</code></td></tr>
+        <tr style="background:rgba(61,214,140,0.08)"><td><code>tote_move_task</code></td><td><strong>Child of rangergrouptask</strong></td><td>Single tote move between storable/conveyor</td><td><span class="chip c-ttp">TTP</span></td><td>created · assigning · assigned · tote_picked · complete</td><td><code>ttp_bot_manager_utils.erl · rm_move_subtasks.erl</code></td></tr>
+        <tr style="background:rgba(216,91,245,0.05)"><td><code>relay_group_task</code></td><td><strong>Parent</strong></td><td>Group container for VTM relay operations (PPS-driven)</td><td><span class="chip c-vtm">VTM</span></td><td>loading_from_relay · loading_from_storable · unloading_at_relay · unloading_at_storable</td><td><code>vtm_bot_manager_utils.erl · relay_group_subtasks.erl</code></td></tr>
+        <tr style="background:rgba(216,91,245,0.08)"><td><code>relay_tote_task</code></td><td><strong>Child of relay_group_task</strong></td><td>Single tote: storable↔relay point</td><td><span class="chip c-vtm">VTM</span></td><td>created · assigned · tote_picked · complete</td><td><code>vtm_bot_manager_utils.erl · create_relay_group_load/unload_subtasks</code></td></tr>
+        <tr style="background:rgba(216,91,245,0.05)"><td><code>dummy_tote_relay_task</code></td><td><strong>Parent</strong></td><td>Looping VTM cycle task — front/back cycle between TTP and relay locations</td><td><span class="chip c-vtm">VTM</span></td><td>loading_from_storable · unloading_at_relay_point · loading_from_relay_point · unloading_at_storable · complete</td><td><code>vtm_bot_manager_utils.erl · dummy_tote_relay_subtasks.erl</code></td></tr>
+        <tr style="background:rgba(216,91,245,0.08)"><td><code>tote_move_relay_task</code></td><td><strong>Child of dummy_tote_relay_task</strong></td><td>Single tote move: storable_to_relay or relay_to_storable</td><td><span class="chip c-vtm">VTM</span></td><td>created · assigned · tote_picked · complete</td><td><code>vtm_bot_manager_utils.erl · create_subtasks_for_tote_move_relay_task/1</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Task Hierarchy — Parent / Child Relationships</div>
+    <div class="grid4">
+      <div style="background:var(--surface2);border:1px solid #1a2250;border-radius:8px;padding:12px;">
+        <div style="color:var(--rtp);font-weight:700;margin-bottom:8px;">RTP — Flat Tasks</div>
+        <div class="fn" style="border-color:var(--rtp);margin-bottom:5px;display:block;text-align:center;">picktask</div>
+        <div style="text-align:center;font-size:11px;color:var(--text-muted);margin-bottom:5px;">independent</div>
+        <div class="fn" style="border-color:var(--rtp);display:block;text-align:center;">store_task</div>
+        <div style="font-size:10px;color:var(--text-muted);margin-top:8px;">No parent/child. Each task self-contained. store_task triggered after pick completes or on demand.</div>
+      </div>
+      <div style="background:var(--surface2);border:1px solid #3d2510;border-radius:8px;padding:12px;">
+        <div style="color:var(--htm);font-weight:700;margin-bottom:8px;">HTM — Flat Tasks</div>
+        <div style="font-size:10px;color:var(--text-muted);margin-bottom:6px;">5 flat task types, no nesting:</div>
+        <div class="fn" style="border-color:var(--htm);margin-bottom:3px;font-size:10px;display:block;text-align:center;">relay_to_pps</div>
+        <div class="fn" style="border-color:var(--htm);margin-bottom:3px;font-size:10px;display:block;text-align:center;">pps_to_relay</div>
+        <div class="fn" style="border-color:var(--htm);margin-bottom:3px;font-size:10px;display:block;text-align:center;">relay_to_conveyor</div>
+        <div class="fn" style="border-color:var(--htm);margin-bottom:3px;font-size:10px;display:block;text-align:center;">conveyor_to_block</div>
+        <div class="fn" style="border-color:var(--htm);font-size:10px;display:block;text-align:center;">block_to_queue</div>
+      </div>
+      <div style="background:var(--surface2);border:1px solid #1e4030;border-radius:8px;padding:12px;">
+        <div style="color:var(--ttp);font-weight:700;margin-bottom:8px;">TTP — 2-Level Hierarchy</div>
+        <div class="fn" style="border-color:var(--ttp);display:block;text-align:center;margin-bottom:4px;">rangergrouptask</div>
+        <div style="text-align:center;color:var(--text-muted);font-size:12px;">1 ↓ many</div>
+        <div class="fn" style="border-color:var(--ttp);display:block;text-align:center;font-size:10px;">tote_move_task[ ]</div>
+        <div style="font-size:10px;color:var(--text-muted);margin-top:6px;">Types: storable↔conveyor, storable↔storable</div>
+      </div>
+      <div style="background:var(--surface2);border:1px solid #2d1045;border-radius:8px;padding:12px;">
+        <div style="color:var(--vtm);font-weight:700;margin-bottom:8px;">VTM — 2 Parallel Hierarchies</div>
+        <div class="fn" style="border-color:var(--vtm);display:block;text-align:center;font-size:10px;margin-bottom:2px;">relay_group_task</div>
+        <div style="text-align:center;color:var(--text-muted);font-size:11px;">1 ↓ many</div>
+        <div class="fn" style="border-color:var(--vtm);display:block;text-align:center;font-size:9px;margin-bottom:8px;">relay_tote_task[ ]</div>
+        <div class="fn" style="border-color:var(--vtm);display:block;text-align:center;font-size:10px;margin-bottom:2px;">dummy_tote_relay_task</div>
+        <div style="text-align:center;color:var(--text-muted);font-size:11px;">1 ↓ many</div>
+        <div class="fn" style="border-color:var(--vtm);display:block;text-align:center;font-size:9px;">tote_move_relay_task[ ]</div>
+      </div>
+    </div>
+  </div>
+
+  <h3 style="margin-bottom:8px;"><span class="chip c-rtp">RTP</span> Task Flows — butler_manager_utils.erl</h3>
+  <div class="grid2">
+    <div class="card">
+      <div class="card-title">picktask — Full Status Machine <span class="src">create_pick_or_audit_or_item_search_subtasks/8</span></div>
+      <div class="flow-row"><div class="fn" style="border-color:var(--rtp)">pending</div><div class="fa">→</div><div class="fn">goto_barcode → RackLoc</div><div class="fa">→</div><div class="fn">lift [0]</div></div>
+      <div style="font-size:10px;color:var(--text-muted);margin:2px 0 2px 16px;">↓ rack lifted (travel position) — skipped if already lifted</div>
+      <div class="flow-row"><div class="fn">plc_available / rack_picked</div><div class="fa">→</div><div class="fn">goto_barcode → PickPosition</div></div>
+      <div style="font-size:10px;color:var(--text-muted);margin:2px 0 2px 16px;">↓ ARA path: reserve_coordinates_or_wait → wait_for_plc → lift[1] → allow_operator → block_operator → lift[0]</div>
+      <div class="flow-row"><div class="fn">pps_control</div></div>
+      <div style="font-size:10px;color:var(--text-muted);margin:2px 0 2px 16px;">↓ if PpsLiftDownEnabled: lift[1] → pps_control → lift[0]; else: pps_control only</div>
+      <div class="flow-row"><div class="fn">pps_complete</div><div class="fa">→</div><div class="fn">goto_barcode → ExitPos</div><div class="fa">→</div><div class="fn">check_rack_tasks</div></div>
+      <div class="flow-row"><div class="fn">storing</div><div class="fa">→</div><div class="fn">goto_store</div><div class="fa">→</div><div class="fn">lift [1]</div><div class="fa">→</div><div class="fn">set_task_complete</div></div>
+    </div>
+    <div class="card">
+      <div class="card-title">store_task — Status Machine <span class="src">create_goto_store_subtasks/3 · create_rack_restore_subtasks/3</span></div>
+      <div style="font-size:11px;color:var(--text-dim);margin-bottom:8px;">Triggered after pick completes or for direct rack repositioning.</div>
+      <div class="flow-row"><div class="fn" style="border-color:var(--rtp)">assigned</div><div class="fa">→</div><div class="fn">check_rack_tasks</div></div>
+      <div class="flow-row"><div class="fn">goto_store</div><div class="fa">→</div><div class="fn">lift [1]</div><div class="fa">→</div><div class="fn">set_movetask_complete</div></div>
+      <div style="margin-top:10px;font-size:10px;color:var(--text-muted);">n-deep storage variant:</div>
+      <div class="flow-row"><div class="fn">goto_deepest_store_location</div><div class="fa">→</div><div class="fn">lift [1]</div><div class="fa">→</div><div class="fn">set_movetask_complete</div></div>
+      <div style="margin-top:8px;font-size:10px;color:var(--text-muted);">If rack already stored: <code>lift[1] → set_movetask_complete</code> only</div>
+    </div>
+  </div>
+
+  <h3 style="margin-bottom:8px;margin-top:14px;"><span class="chip c-htm">HTM</span> Task Flows — relay_pps_subtasks.erl (HTM-only module)</h3>
+  <div class="grid2">
+    <div class="card">
+      <div class="card-title">relay_to_pps — Status Machine <span class="src">lines 1539–1786</span></div>
+      <div class="flow-row"><div class="fn" style="border-color:var(--htm)">assigned</div><div class="fa">→</div><div class="fn">goto_barcode → RelayIOPoint</div></div>
+      <div style="font-size:10px;color:var(--text-muted);margin:2px 0 2px 16px;">↓ set_fork_height_to_entry_height_without_tote → goto_barcode → RelaySlot</div>
+      <div class="flow-row"><div class="fn">tote_picked (htm_load_tote)</div><div class="fa">→</div><div class="fn">goto_barcode → LiftUpCoord</div></div>
+      <div style="font-size:10px;color:var(--text-muted);margin:2px 0 2px 16px;">↓ set_fork_height_to_htm_bot_maxdown_height (if not already at maxdown)</div>
+      <div class="flow-row"><div class="fn">reached_liftup</div><div class="fa">→</div><div class="fn">set_fork_height_to_htm_bot_for_pps</div></div>
+      <div class="flow-row"><div class="fn">pps_control</div><div class="fa">→</div><div class="fn">going_to_liftdown</div></div>
+      <div style="font-size:10px;color:var(--text-muted);margin:2px 0 2px 16px;">↓ goto_barcode → LiftDownCoord → set_fork_height_to_htm_bot_maxdown_height</div>
+      <div class="flow-row"><div class="fn">going_to_exit_queue</div><div class="fa">→</div><div class="fn">goto_exit_queue_end</div></div>
+      <div class="flow-row"><div class="fn">storing</div><div class="fa">→</div><div class="fn">compute_tote_store / compute_tote_drop</div></div>
+    </div>
+    <div class="card">
+      <div class="card-title">pps_to_relay — Status Machine <span class="src">lines 1511–1537</span></div>
+      <div class="flow-row"><div class="fn" style="border-color:var(--htm)">assigned</div><div class="fa">→</div><div class="fn">goto_barcode → ConveyorIOPoint</div></div>
+      <div style="font-size:10px;color:var(--text-muted);margin:2px 0 2px 16px;">↓ set_fork_height_to_htm_bot_for_pps (if conveyor underpass)</div>
+      <div class="flow-row"><div class="fn">htm_load_tote</div><div class="fa">→</div><div class="fn">tote_picked</div></div>
+      <div class="flow-row"><div class="fn">goto_defined_destinations</div><div class="fa">→</div><div class="fn">storing</div></div>
+      <div class="flow-row"><div class="fn">compute_tote_store</div><div class="fa">→</div><div class="fn">task_complete</div></div>
+    </div>
+    <div class="card">
+      <div class="card-title">relay_to_conveyor — EasyLoop <span class="src">lines 2364–2499</span></div>
+      <div class="flow-row"><div class="fn" style="border-color:var(--htm)">assigned</div><div class="fa">→</div><div class="fn">goto_barcode → RelayIOPoint</div></div>
+      <div class="flow-row"><div class="fn">set_fork_height_to_entry_height_without_tote</div></div>
+      <div class="flow-row"><div class="fn">htm_load_tote</div><div class="fa">→</div><div class="fn">tote_picked</div></div>
+      <div style="font-size:10px;color:var(--text-muted);margin:2px 0 2px 16px;">↓ waiting_for_safe_to_drop (if tote_extraction+put) → publish_container_lifted</div>
+      <div class="flow-row"><div class="fn">set_fork_height_to_htm_bot_for_pps</div><div class="fa">→</div><div class="fn">goto_barcode → PPSPoint</div></div>
+      <div class="flow-row"><div class="fn">pps_control</div><div class="fa">→</div><div class="fn">compute_tote_drop_conveyor</div><div class="fa">→</div><div class="fn">task_complete</div></div>
+    </div>
+    <div class="card">
+      <div class="card-title">conveyor_to_block / block_to_queue <span class="src">lines 3130–3300</span></div>
+      <div style="font-size:11px;color:var(--text-dim);margin-bottom:6px;"><strong>conveyor_to_block:</strong></div>
+      <div class="flow-row"><div class="fn" style="border-color:var(--htm)">assigned</div><div class="fa">→</div><div class="fn">goto_barcode</div><div class="fa">→</div><div class="fn">htm_load_tote</div></div>
+      <div class="flow-row"><div class="fn">waiting_after_pick</div><div class="fa">→</div><div class="fn">goto_barcode → Block</div><div class="fa">→</div><div class="fn">reached_waiting_block</div></div>
+      <div style="font-size:11px;color:var(--text-dim);margin:8px 0 6px 0;"><strong>block_to_queue:</strong></div>
+      <div class="flow-row"><div class="fn" style="border-color:var(--htm)">assigned/tote_picked</div><div class="fa">→</div><div class="fn">goto_barcode → QueueExitPoint</div></div>
+      <div class="flow-row"><div class="fn">going_to_queue</div><div class="fa">→</div><div class="fn">reached_exit_point</div><div class="fa">→</div><div class="fn">set_relay_pps_task_complete</div></div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:6px;">
+    <div class="card-title">bot_transport — Reposition / Fork Height Pre-check <span class="src">bot_transport_subtasks.erl:290</span></div>
+    <div class="grid2">
+      <div>
+        <div class="flow-row"><div class="fn">create_subtask_list_for_bot_transport_task/2</div></div>
+        <div style="font-size:10px;color:var(--text-muted);margin:5px 0;">Applicable to all bot categories. Dispatches based on fork capability:</div>
+        <div class="flow-row"><div class="fn">fork_enabled?</div><div class="fa">→</div><div class="fn">maybe_conveyor_fork_height_subtask/1 (line 402)</div></div>
+        <div style="font-size:10px;color:var(--text-muted);margin-top:4px;">Config: <code>vertical_movement_profile_map → htm_bot_maxdown_height</code></div>
+      </div>
+      <div>
+        <div style="font-size:11px;color:var(--text-dim);">Prepended subtasks before navigation for HTM_QT_M5F (fork-enabled HTM):</div>
+        <div class="flow-row" style="margin-top:6px;"><div class="fn">set_fork_height_to_htm_bot_maxdown_height</div></div>
+        <div class="flow-row"><div class="fn">goto_barcode → Destination</div></div>
+        <div style="font-size:10px;color:var(--text-muted);margin-top:4px;">Non-fork bots: <code>goto_barcode → Destination</code> only</div>
+      </div>
+    </div>
+  </div>
+
+  <h3 style="margin-bottom:8px;margin-top:16px;"><span class="chip c-ttp">TTP</span> Task Flows — ttp_bot_manager_utils.erl · rm_move_subtasks.erl</h3>
+  <div class="info" style="margin-bottom:10px;">ℹ️ TTP uses a 2-level hierarchy. <code>rangergrouptask</code> is the parent container tracking group-level state with a substatus per child task (<code>transfer_pending → transfer_requested → transfer_complete → action_complete</code>). Each <code>tote_move_task</code> child handles one tote's full load+travel+unload sequence. Subtask dispatch in <code>rm_move_subtasks.erl</code>. All TTP bots: VDA5050, fork-enabled, bi-dir _05.</div>
+  <div class="grid2">
+    <div class="card">
+      <div class="card-title">rangergrouptask — Parent Status Machine <span class="src">rangergrouptaskrec.erl · gmc_ttp_task_manager.erl</span></div>
+      <div style="font-size:11px;color:var(--text-dim);margin-bottom:8px;">Parent container. Spawns child <code>tote_move_task[]</code> instances. Advances status as children complete. Substatus per child: <code>transfer_pending → transfer_requested → transfer_complete → action_complete</code></div>
+      <div class="flow-row"><div class="fn" style="border-color:var(--ttp)">loading_from_storable</div><div class="fa">→</div><div class="fn">spawn tote_move_task[storable_to_conveyor]</div></div>
+      <div class="flow-row"><div class="fn">loading_from_conveyor</div><div class="fa">→</div><div class="fn">tote_move_task[conveyor_to_storable]</div></div>
+      <div class="flow-row"><div class="fn">unloading_at_storable</div><div class="fa">→</div><div class="fn">tote_move_task[storable_to_storable]</div></div>
+      <div class="flow-row"><div class="fn">unloading_at_conveyor</div><div class="fa">→</div><div class="fn">tote_move_task[conveyor_to_conveyor]</div></div>
+      <div class="flow-row"><div class="fn">loading_from_store</div><div class="fa">→</div><div class="fn">tote_move_task from store location</div></div>
+      <div class="flow-row"><div class="fn" style="border-color:var(--green)">complete</div></div>
+      <div style="font-size:10px;color:var(--text-muted);margin-top:6px;">PPS variant adds <code>pps_control</code> for unloading_at_conveyor when destination is a PPS station.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">tote_move_task — Child Status Machine <span class="src">tote_move_task.erl · ttp_bot_manager_utils.erl · rm_move_subtasks.erl</span></div>
+      <div style="font-size:11px;color:var(--text-dim);margin-bottom:8px;">Types: <code>storable_to_conveyor</code> · <code>conveyor_to_storable</code> · <code>conveyor_to_conveyor</code> · <code>storable_to_storable</code></div>
+      <div class="flow-row"><div class="fn" style="border-color:var(--ttp)">created → assigning</div><div class="fa">→</div><div class="fn">bot selected by scheduler</div></div>
+      <div class="flow-row"><div class="fn">assigned</div><div class="fa">→</div><div class="fn">goto_barcode → SourceLocation</div></div>
+      <div style="font-size:10px;color:var(--text-muted);margin:2px 0 2px 16px;">↓ pre_load_unload_action → set_fork_height_to_entry_height_without_tote</div>
+      <div class="flow-row"><div class="fn">tote_picked (load_tote)</div><div class="fa">→</div><div class="fn">set_fork_height_to_entry_height_with_tote</div></div>
+      <div style="font-size:10px;color:var(--text-muted);margin:2px 0 2px 16px;">↓ goto_barcode → DestLocation</div>
+      <div class="flow-row"><div class="fn">unload_tote</div><div class="fa">→</div><div class="fn">pre_load_unload_action (post)</div></div>
+      <div style="font-size:10px;color:var(--text-muted);margin:2px 0 2px 16px;">↓ check_and_assign_dummy_loop (if VTM buffer-refill needed)</div>
+      <div class="flow-row"><div class="fn" style="border-color:var(--green)">complete → set_task_complete</div></div>
+      <div style="font-size:10px;color:var(--text-muted);margin-top:5px;">PPS path: adds <code>pps_control → going_to_exit_queue</code> before complete. TTP↔HTM handoff: uses <code>htm_load_tote / htm_unload_tote</code>.</div>
+    </div>
+  </div>
+
+  <h3 style="margin-bottom:8px;margin-top:16px;"><span class="chip c-vtm">VTM</span> Task Flows — vtm_bot_manager_utils.erl · relay_group_subtasks.erl · dummy_tote_relay_subtasks.erl</h3>
+  <div class="info" style="margin-bottom:10px;">ℹ️ VTM has <strong>two parallel 2-level hierarchies</strong>. <code>relay_group_task</code> is PPS-demand-driven — triggered by WMS/PPS request for a tote. <code>dummy_tote_relay_task</code> is a continuous looping cycle that pre-populates the relay buffer between VTM and TTP zones. Both produce typed child tasks. Scheduler: <code>gmc_ttp_task_manager.erl</code>. All VTM bots: VDA5050, fork-enabled, bi-dir _06 (always-rotate), telescopic reach up to 12 m.</div>
+  <div class="grid2">
+    <div class="card">
+      <div class="card-title">relay_group_task — PPS-Demand Parent <span class="src">relay_group_task.erl · relay_group_subtasks.erl</span></div>
+      <div style="font-size:11px;color:var(--text-dim);margin-bottom:8px;">Triggered by PPS demand. Manages child <code>relay_tote_task</code> instances for storable↔relay point tote moves.</div>
+      <div class="flow-row"><div class="fn" style="border-color:var(--vtm)">loading_from_relay</div><div class="fa">→</div><div class="fn">set_current_relay_tote_task</div></div>
+      <div style="font-size:10px;color:var(--text-muted);margin:2px 0 2px 16px;">↓ vtm_aisle_checkpoint → pre_fork_clear → fetch_relay_tote_task_destination</div>
+      <div class="flow-row"><div class="fn">pre_load_unload_action</div><div class="fa">→</div><div class="fn">load_tote → tote_picked</div></div>
+      <div style="font-size:10px;color:var(--text-muted);margin:2px 0 2px 16px;">↓ set_relay_tote_task_status → goto_barcode → Dest</div>
+      <div class="flow-row"><div class="fn">loading_from_storable</div><div class="fa">→</div><div class="fn">relay_tote_task[storable_to_relay]</div></div>
+      <div class="flow-row"><div class="fn">unloading_at_relay</div><div class="fa">→</div><div class="fn">unload_tote → update_unload_location</div></div>
+      <div class="flow-row"><div class="fn">unloading_at_storable</div><div class="fa">→</div><div class="fn">relay_tote_task[relay_to_storable]</div></div>
+      <div style="font-size:10px;color:var(--text-muted);margin-top:5px;">Failure path: <code>update_task_after_tote_action_failure → deassign_currenttask</code> &nbsp;|&nbsp; <code>set_relay_group_task_status</code> advances parent after each child completes.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">relay_tote_task — Child of relay_group_task <span class="src">relay_tote_task.erl · vtm_bot_manager_utils.erl</span></div>
+      <div style="font-size:11px;color:var(--text-dim);margin-bottom:8px;">Types: <code>storable_to_relay</code> · <code>relay_to_storable</code></div>
+      <div class="flow-row"><div class="fn" style="border-color:var(--vtm)">created → assigned</div><div class="fa">→</div><div class="fn">goto_barcode → SourceLocation</div></div>
+      <div style="font-size:10px;color:var(--text-muted);margin:2px 0 2px 16px;">↓ vtm_aisle_checkpoint → pre_fork_clear → pre_load_unload_action</div>
+      <div class="flow-row"><div class="fn">tote_picked (load_tote)</div><div class="fa">→</div><div class="fn">set_relay_tote_task_status</div></div>
+      <div style="font-size:10px;color:var(--text-muted);margin:2px 0 2px 16px;">↓ goto_barcode → DestLocation → vtm_aisle_checkpoint</div>
+      <div class="flow-row"><div class="fn">unload_tote</div><div class="fa">→</div><div class="fn">set_relay_group_task_status</div></div>
+      <div class="flow-row"><div class="fn" style="border-color:var(--green)">complete</div></div>
+    </div>
+    <div class="card">
+      <div class="card-title">dummy_tote_relay_task — Looping Buffer-Fill Parent <span class="src">dummy_tote_relay_task.erl · dummy_tote_relay_subtasks.erl</span></div>
+      <div style="font-size:11px;color:var(--text-dim);margin-bottom:8px;">Continuous cycle: storable → relay point → storable → relay point… Keeps relay buffer populated ahead of demand.</div>
+      <div class="flow-row"><div class="fn" style="border-color:var(--vtm)">loading_from_storable</div><div class="fa">→</div><div class="fn">set_current_tote_move_relay_task</div></div>
+      <div style="font-size:10px;color:var(--text-muted);margin:2px 0 2px 16px;">↓ spawn tote_move_relay_task[storable_to_relay]</div>
+      <div class="flow-row"><div class="fn">set_current_task_in_dummy_tote_relay_task</div></div>
+      <div class="flow-row"><div class="fn">unloading_at_relay_point</div><div class="fa">→</div><div class="fn">set_dummy_tote_relay_task_status</div></div>
+      <div class="flow-row"><div class="fn">loading_from_relay_point</div><div class="fa">→</div><div class="fn">tote_move_relay_task[relay_to_storable]</div></div>
+      <div class="flow-row"><div class="fn">unloading_at_storable</div><div class="fa">→</div><div class="fn">set_tote_move_relay_task_status → loop ↻</div></div>
+      <div class="flow-row"><div class="fn" style="border-color:var(--green)">complete</div><div class="fa">→</div><div class="fn">deassign_currenttask</div></div>
+    </div>
+    <div class="card">
+      <div class="card-title">tote_move_relay_task — Child of dummy_tote_relay_task <span class="src">vtm_bot_manager_utils.erl · create_subtasks_for_tote_move_relay_task/1</span></div>
+      <div style="font-size:11px;color:var(--text-dim);margin-bottom:8px;">Types: <code>storable_to_relay</code> · <code>relay_to_storable</code></div>
+      <div class="flow-row"><div class="fn" style="border-color:var(--vtm)">created → assigned</div><div class="fa">→</div><div class="fn">goto_barcode → SourceLocation</div></div>
+      <div style="font-size:10px;color:var(--text-muted);margin:2px 0 2px 16px;">↓ pre_load_unload_action → load_tote</div>
+      <div class="flow-row"><div class="fn">tote_picked</div><div class="fa">→</div><div class="fn">set_tote_move_relay_task_status</div></div>
+      <div style="font-size:10px;color:var(--text-muted);margin:2px 0 2px 16px;">↓ goto_barcode → DestLocation</div>
+      <div class="flow-row"><div class="fn">unload_tote</div><div class="fa">→</div><div class="fn">set_dummy_tote_relay_task_status</div></div>
+      <div class="flow-row"><div class="fn" style="border-color:var(--green)">complete</div></div>
+      <div style="font-size:10px;color:var(--text-muted);margin-top:5px;">Mirrors relay_tote_task but feeds dummy loop parent instead of relay_group_task. Same fork subtask primitives.</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══ TAB 3: SUBTASK CATALOGUE ═══ -->
+<div id="tab-subtasks" class="content">
+  <div class="warn">⚠️ No compile-time behaviour contract. All subtasks dispatched via flat <code>process/1</code> (HTM) or inline construction (RTP). Type <code>subtask_name()</code> in butler_situation.erl:5 uses <code>term()</code> catch-all — zero Dialyzer protection. Primary driver of Modularisation Epic 1.</div>
+
+  <div class="card">
+    <div class="card-title"><span class="chip c-rtp">RTP</span> Navigation &amp; Rack Subtasks <span class="src">butler_manager_utils.erl</span></div>
+    <table>
+      <thead><tr><th>Subtask Atom</th><th>Description</th><th>Key Config</th></tr></thead>
+      <tbody>
+        <tr><td><code>goto_barcode</code></td><td>Universal navigation primitive. Used for every movement: to rack, to PPS pick position, to exit position, to store location. Args include target barcode coordinate + bot facing direction.</td><td><code>velocity_profile_map · butler_turn_time</code></td></tr>
+        <tr><td><code>lift [0]</code></td><td>Engage rack lift mechanism — bot positions under rack and lifts to travel height (rack "picked up"). Called when navigating with rack to PPS.</td><td><code>butler_turn_time · lift_time (ms)</code></td></tr>
+        <tr><td><code>lift [1]</code></td><td>Store rack — lift raises to deposit rack onto storage legs. Called at end of store_task after <code>goto_store</code>.</td><td><code>butler_turn_time · lift_time</code></td></tr>
+        <tr><td><code>goto_store</code></td><td>Navigate to calculated storage slot with rack loaded. Target computed by rack assignment logic.</td><td><code>velocity_profile_map</code></td></tr>
+        <tr><td><code>goto_deepest_store_location</code></td><td>Navigate to deepest available slot in n-deep storage configuration.</td><td><code>velocity_profile_map · n-deep config</code></td></tr>
+        <tr><td><code>check_rack_tasks</code></td><td>Before storing, verify no pending pick tasks exist for this rack that would require immediate retrieval.</td><td>Task scheduler state</td></tr>
+        <tr><td><code>reserve_coordinates_or_wait</code></td><td>ARA-type PPS only. Reserve the approach coordinates; block if occupied by another bot.</td><td>Path reservation model</td></tr>
+        <tr><td><code>wait_for_plc</code></td><td>ARA-type PPS only. Wait for PLC signal that conveyor/lift is ready.</td><td>PLC integration</td></tr>
+        <tr><td><code>allow_operator</code></td><td>ARA: Signal PPS UI to enable operator interaction with rack.</td><td>WCS event</td></tr>
+        <tr><td><code>block_operator</code></td><td>ARA: Signal PPS UI to disable operator access (bot about to move).</td><td>WCS event</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="chip c-rtp">RTP</span> Control &amp; Completion Subtasks <span class="src">butler_manager_utils.erl</span></div>
+    <table>
+      <thead><tr><th>Subtask Atom</th><th>Description</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td><code>pps_control</code></td><td>Interact at PPS — signal pick station, wait for operator confirmation. Used by both RTP and HTM.</td><td>Shared with HTM. If PpsLiftDownEnabled: wraps with <code>lift[1] … lift[0]</code></td></tr>
+        <tr><td><code>set_task_complete</code></td><td>Mark picktask complete after rack is stored.</td><td>Writes to Mnesia task record</td></tr>
+        <tr><td><code>set_movetask_complete</code></td><td>Mark store_task complete.</td><td>Separate from picktask completion</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="chip c-htm">HTM</span> Navigation &amp; Fork Height Subtasks <span class="src">relay_pps_subtasks.erl</span></div>
+    <table>
+      <thead><tr><th>Subtask Atom</th><th>Description</th><th>Key Config</th></tr></thead>
+      <tbody>
+        <tr><td><code>goto_barcode</code></td><td>Same universal nav primitive as RTP. Used to reach: relay IO point, relay access slot, PPS point, lift-up coord, lift-down coord, exit queue, conveyor point.</td><td><code>velocity_profile_map · secondary_movement_profile (on relay approach)</code></td></tr>
+        <tr><td><code>set_fork_height_to_htm_bot_maxdown_height</code></td><td>Lower fork to travel/safe height. Called before and after tote interactions. HTM_QT_M5F: 240 mm, K50: 310 mm, K50_L_E1: 446 mm, K50_X_E1: 489 mm.</td><td><code>vertical_movement_profile_map → htm_bot_maxdown_height</code></td></tr>
+        <tr><td><code>set_fork_height_to_entry_height_without_tote</code></td><td>Set fork to the approach height for entering relay slot (no tote loaded).</td><td><code>htm_fork_pick_offset_height (50 mm / 35 mm)</code></td></tr>
+        <tr><td><code>set_fork_height_to_htm_bot_for_pps</code></td><td>Raise fork to PPS handoff height — height at which tote is presented to PPS conveyor/operator.</td><td><code>htm_bot_maxup_height (K50_X_E1: 690 mm)</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="chip c-htm">HTM</span> Tote Load / Store / Drop Subtasks <span class="src">relay_pps_subtasks.erl</span></div>
+    <table>
+      <thead><tr><th>Subtask Atom</th><th>Description</th><th>Key Config</th></tr></thead>
+      <tbody>
+        <tr><td><code>htm_load_tote</code></td><td>Load tote onto HTM bot. For fork-type (HTM_QT_M5F): extends fork to pick tote from relay slot. For conveyor-type: roller/push mechanism engages. Used in: relay_to_pps, pps_to_relay, relay_to_conveyor, conveyor_to_block.</td><td><code>pick_action_time=5000ms · secondary_movement_profile</code></td></tr>
+        <tr><td><code>compute_tote_store</code></td><td>Calculate and execute tote deposit to relay storable location. Determines exact slot coordinates and executes put action.</td><td><code>htm_fork_drop_offset_height · put_action_time=5000ms</code></td></tr>
+        <tr><td><code>compute_tote_drop</code></td><td>Execute tote drop at PPS destination after outbound flow (relay_to_pps outbound path).</td><td><code>pps_control result</code></td></tr>
+        <tr><td><code>compute_tote_drop_conveyor</code></td><td>Execute tote transfer onto EasyLoop conveyor belt (relay_to_conveyor final step).</td><td><code>htm_bot_maxup_height</code></td></tr>
+        <tr><td><code>goto_defined_destinations</code></td><td>Navigate to a pre-computed set of relay destinations for tote storage (pps_to_relay).</td><td>Relay storable assignment</td></tr>
+        <tr><td><code>goto_exit_queue_end</code></td><td>Navigate to exit queue endpoint after PPS interaction (relay_to_pps exit path).</td><td><code>velocity_profile_map</code></td></tr>
+        <tr><td><code>goto_reverse_exit</code></td><td>Navigate in reverse to exit relay slot after tote drop (relay_to_pps tote_dropped status).</td><td><code>bi_directional_movement_07 / _08</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="chip c-htm">HTM</span> Wait / Sync / Control Subtasks</div>
+    <table>
+      <thead><tr><th>Subtask Atom</th><th>Description</th><th>Saga-safe?</th></tr></thead>
+      <tbody>
+        <tr><td><code>waiting_for_safe_to_drop</code></td><td>HTM holds until relay storable is confirmed safe for tote deposit. Paired with <code>mark_safe_to_drop_false</code> Kafka event.</td><td><span style="color:var(--green)">✅ gen_saga:promise inside ?MNESIA_TRANSACTION (line 2764)</span></td></tr>
+        <tr><td><code>wait_for_dependency_clearance</code></td><td>Hold at PPS until upstream dependency (another bot, conveyor slot, WCS gate) clears.</td><td><span style="color:var(--red)">❌ Direct</span></td></tr>
+        <tr><td><code>waiting_after_pick</code></td><td>conveyor_to_block: hold after tote pick until block slot is available.</td><td>N/A</td></tr>
+        <tr><td><code>pps_control</code></td><td>Shared with RTP — PPS station interaction and operator confirmation.</td><td><span style="color:var(--red)">❌ Direct Kafka</span></td></tr>
+        <tr><td><code>check_same_tote_task</code></td><td>After exit_queue: verify no conflicting same-tote task exists before storing.</td><td>N/A</td></tr>
+        <tr><td><code>publish_container_lifted</code></td><td>relay_to_conveyor: emit event that container has been lifted from relay storable.</td><td><span style="color:var(--red)">❌ Direct</span></td></tr>
+        <tr><td><code>set_relay_pps_task_complete</code></td><td>block_to_queue: mark outbound relay task complete after reaching exit point.</td><td>N/A</td></tr>
+        <tr><td><code>set_outbound_relay_pps_task_complete</code></td><td>Variant of above for explicit outbound flow completion.</td><td>N/A</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="chip c-ttp">TTP</span> Tote Load / Unload / Height Subtasks <span class="src">rm_move_subtasks.erl · ttp_bot_manager_utils.erl</span></div>
+    <table>
+      <thead><tr><th>Subtask Atom</th><th>Description</th><th>Key Config</th></tr></thead>
+      <tbody>
+        <tr><td><code>pre_load_unload_action</code></td><td>Pre-action hook executed before load or unload. Handles fork approach checks, aisle clearance, dependency waits. Shared across TTP and VTM. Called both before picking and before putting a tote.</td><td><code>vertical_movement_profile_map · fork_velocity=0.55mm/ms</code></td></tr>
+        <tr><td><code>load_tote</code></td><td>Load tote onto TTP/VTM fork. Extends fork to target storable/relay slot at computed height, engages tote, retracts. Shared: used by TTP tote_move_task, VTM relay_tote_task, and tote_move_relay_task. Same atom, config resolved per bot variant.</td><td><code>pick_action_time=5000ms · fork entry/exit heights · vertical_movement_profile_map</code></td></tr>
+        <tr><td><code>unload_tote</code></td><td>Unload tote from fork at destination slot. Extends fork, deposits tote, retracts. Shared across all TTP and VTM task types that deposit totes.</td><td><code>put_action_time=5000ms · fork entry/exit heights</code></td></tr>
+        <tr><td><code>set_fork_height_to_entry_height_with_tote</code></td><td>Set fork to safe travel height with tote loaded. Required to avoid shelf/rack collisions during inter-aisle navigation after picking. Applied after <code>load_tote</code>, before <code>goto_barcode</code> to destination. TTP-specific (VTM handles this differently via vertical_movement_profile).</td><td><code>htm_fork_drop_offset_height (with_tote variant) · vertical_movement_profile_map</code></td></tr>
+        <tr><td><code>htm_unload_tote</code></td><td>HTM-specific unload variant used in TTP↔HTM handoff scenarios. TTP bot deposits tote onto HTM relay surface using conveyor-compatible transfer height. Distinct from generic <code>unload_tote</code> — handles conveyor-style transfer.</td><td><code>secondary_movement_profile (HTM) · htm_bot_maxup_height</code></td></tr>
+        <tr><td><code>going_to_exit_queue</code></td><td>Navigate TTP bot to PPS exit queue after PPS interaction — ensures orderly egress from PPS zone. Shared atom name with relay_to_pps status in HTM (where it's a task status, not a subtask), but in rm_move_subtasks.erl it is a subtask atom for TTP PPS exit navigation.</td><td><code>velocity_profile_map · exit_queue barcode coord</code></td></tr>
+        <tr><td><code>check_and_assign_dummy_loop</code></td><td>After TTP tote delivery, check whether a dummy looping buffer-refill task (<code>tote_move_relay_task</code>) should be assigned to a VTM. If relay buffer is under threshold, assigns next looping cycle.</td><td>VTM dummy loop threshold config</td></tr>
+        <tr><td><code>pps_control</code></td><td>Shared with RTP and HTM — PPS station interaction at TTP-PPS handoff point. Conditional: only included in tote_move_task when destination is a PPS station type.</td><td>WCS event · PPS station type config</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="chip c-vtm">VTM</span> Navigation &amp; Aisle Control Subtasks <span class="src">relay_group_subtasks.erl · dummy_tote_relay_subtasks.erl</span></div>
+    <table>
+      <thead><tr><th>Subtask Atom</th><th>Description</th><th>Key Config</th></tr></thead>
+      <tbody>
+        <tr><td><code>goto_barcode</code></td><td>Same universal nav primitive — VTM context includes vertical fork travel. <code>vertical_movement_profile_map</code> governs fork velocity (0.55 mm/ms) and pick_action_time for height transitions during each aisle entry/exit.</td><td><code>vertical_movement_profile_map · velocity_profile_map · bi_directional_movement_06</code></td></tr>
+        <tr><td><code>vtm_aisle_checkpoint</code></td><td>VTM-specific aisle entry/exit checkpoint. Verifies aisle clearance, coordinates with floor traffic management, acquires aisle lock before VTM enters vertical travel zone. Applied at every aisle boundary crossing in relay_tote_task flow.</td><td>VTM floor zone config · aisle lock table</td></tr>
+        <tr><td><code>pre_fork_clear</code></td><td>Ensure fork is retracted and clear of obstructions before proceeding with next load/unload. Verifies fork position sensors; re-homes if misaligned. Used in relay_group_task before every tote action.</td><td><code>vertical_movement_profile_map · fork home position · fork_velocity</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="chip c-vtm">VTM</span> Task State Management Subtasks <span class="src">relay_group_subtasks.erl · dummy_tote_relay_subtasks.erl · vtm_bot_manager_utils.erl</span></div>
+    <table>
+      <thead><tr><th>Subtask Atom</th><th>Description</th><th>Task Scope</th></tr></thead>
+      <tbody>
+        <tr><td><code>set_current_relay_tote_task</code></td><td>Sets active relay_tote_task reference on parent relay_group_task. Called at start of each child cycle to bind parent→child in Mnesia.</td><td><code>relay_group_task → relay_tote_task</code></td></tr>
+        <tr><td><code>set_relay_group_task_status</code></td><td>Advances relay_group_task parent status after child relay_tote_task completes or fails. Triggers next parent state (e.g. loading → unloading).</td><td><code>relay_group_task</code></td></tr>
+        <tr><td><code>set_relay_tote_task_status</code></td><td>Updates relay_tote_task child status (created → assigned → tote_picked → complete). Shared between relay_group_subtasks and vtm_bot_manager_utils.</td><td><code>relay_tote_task</code></td></tr>
+        <tr><td><code>fetch_relay_tote_task_destination</code></td><td>Computes destination for current relay_tote_task — relay point or storable slot. Must run before goto_barcode.</td><td><code>relay_tote_task destination resolution</code></td></tr>
+        <tr><td><code>update_unload_location</code></td><td>Recalculate unload destination at put time — relay storable slot may not be known until after load. Used in relay_group_task unloading_at_relay state.</td><td><code>relay_group_task unloading_at_relay</code></td></tr>
+        <tr><td><code>update_task_after_tote_action_failure</code></td><td>Handle failure during tote load or unload in relay_group_task. Updates task state for recovery or abort flow.</td><td><code>relay_group_task (failure path)</code></td></tr>
+        <tr><td><code>deassign_currenttask</code></td><td>Deassign bot from current task on failure or loop completion. Used in both relay_group_task (failure) and dummy_tote_relay_task (loop exit / task complete).</td><td>Both VTM parent tasks</td></tr>
+        <tr><td><code>set_current_tote_move_relay_task</code></td><td>Sets active tote_move_relay_task reference on parent dummy_tote_relay_task. Looping analogue of set_current_relay_tote_task.</td><td><code>dummy_tote_relay_task → tote_move_relay_task</code></td></tr>
+        <tr><td><code>set_current_task_in_dummy_tote_relay_task</code></td><td>Records current task context inside dummy_tote_relay_task for tracking loop iteration state across status transitions.</td><td><code>dummy_tote_relay_task</code></td></tr>
+        <tr><td><code>set_dummy_tote_relay_task_status</code></td><td>Advances dummy_tote_relay_task through its looping cycle statuses (loading_from_storable → unloading_at_relay_point → loading_from_relay_point → unloading_at_storable → loop ↻).</td><td><code>dummy_tote_relay_task</code></td></tr>
+        <tr><td><code>set_tote_move_relay_task_status</code></td><td>Updates tote_move_relay_task child status. Mirrors set_relay_tote_task_status for the dummy loop hierarchy.</td><td><code>tote_move_relay_task</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══ TAB 4: RELATIONSHIP DIAGRAM ═══ -->
+<div id="tab-diagram" class="content">
+  <div class="card">
+    <div class="card-title">Task → Subtask Relationship Matrix — All 14 Task Types
+      <span class="src">butler_manager_utils.erl · relay_pps_subtasks.erl · bot_transport_subtasks.erl · rm_move_subtasks.erl · relay_group_subtasks.erl · dummy_tote_relay_subtasks.erl</span>
+    </div>
+    <div style="font-size:11px;color:var(--text-dim);margin-bottom:12px;">
+      Cells: <strong style="color:var(--green)">●</strong> = used &nbsp;|&nbsp; <strong style="color:var(--yellow)">cond</strong> = conditional &nbsp;|&nbsp; <strong style="color:var(--text-muted)">·</strong> = not used. Cardinality: <em>1 task (1:M)</em> = task-exclusive &nbsp;|&nbsp; <em>N tasks (M:M)</em> = shared primitive.
+    </div>
+    <div style="overflow-x:auto;">
+    <table id="matrixTable" style="font-size:11px;min-width:1400px;">
+      <thead>
+        <tr>
+          <th style="min-width:220px;background:var(--bg)">Subtask Atom</th>
+          <th style="color:var(--rtp);background:var(--bg);font-size:10px;">picktask</th>
+          <th style="color:var(--rtp);background:var(--bg);font-size:10px;">store_task</th>
+          <th style="color:var(--htm);background:var(--bg);font-size:10px;">relay_to_pps</th>
+          <th style="color:var(--htm);background:var(--bg);font-size:10px;">pps_to_relay</th>
+          <th style="color:var(--htm);background:var(--bg);font-size:10px;">relay_to_conv</th>
+          <th style="color:var(--htm);background:var(--bg);font-size:10px;">conv_to_block</th>
+          <th style="color:var(--htm);background:var(--bg);font-size:10px;">block_to_queue</th>
+          <th style="color:var(--text-dim);background:var(--bg);font-size:10px;">bot_transport</th>
+          <th style="color:var(--ttp);background:var(--bg);font-size:10px;">rangergroupt.</th>
+          <th style="color:var(--ttp);background:var(--bg);font-size:10px;">tote_move_t.</th>
+          <th style="color:var(--vtm);background:var(--bg);font-size:10px;">relay_group_t.</th>
+          <th style="color:var(--vtm);background:var(--bg);font-size:10px;">relay_tote_t.</th>
+          <th style="color:var(--vtm);background:var(--bg);font-size:10px;">dummy_relay_t.</th>
+          <th style="color:var(--vtm);background:var(--bg);font-size:10px;">tote_move_r_t.</th>
+          <th style="background:var(--bg)">Cardinality</th>
+        </tr>
+      </thead>
+      <tbody id="matrixBody"></tbody>
+    </table>
+    </div>
+  </div>
+
+  <div class="grid2" style="margin-top:14px;">
+    <div class="card">
+      <div class="card-title">Many-to-Many Relationships — Shared Subtasks</div>
+      <p style="font-size:11px;color:var(--text-dim);line-height:1.7;margin-bottom:10px;">
+        These subtask atoms are used by multiple task types (M:M). They are the core reusable primitives — any modularisation effort should declare these as first-class shareable behaviours with explicit capability contracts.
+      </p>
+      <table>
+        <thead><tr><th>Subtask</th><th>Used by (task types)</th><th>Bot categories</th></tr></thead>
+        <tbody>
+          <tr><td><code>goto_barcode</code></td><td>ALL 14 task types — universal nav primitive</td><td>All bot categories</td></tr>
+          <tr><td><code>load_tote</code></td><td>tote_move_task, relay_group_task, relay_tote_task, dummy_tote_relay_task, tote_move_relay_task (5 tasks)</td><td><span class="chip c-ttp">TTP</span><span class="chip c-vtm">VTM</span></td></tr>
+          <tr><td><code>unload_tote</code></td><td>tote_move_task, relay_group_task, relay_tote_task, dummy_tote_relay_task, tote_move_relay_task (5 tasks)</td><td><span class="chip c-ttp">TTP</span><span class="chip c-vtm">VTM</span></td></tr>
+          <tr><td><code>pre_load_unload_action</code></td><td>tote_move_task, relay_group_task, relay_tote_task, dummy_tote_relay_task, tote_move_relay_task (5 tasks)</td><td><span class="chip c-ttp">TTP</span><span class="chip c-vtm">VTM</span></td></tr>
+          <tr><td><code>pps_control</code></td><td>picktask, relay_to_pps, relay_to_conveyor (+ cond: rangergrouptask, tote_move_task)</td><td><span class="chip c-rtp">RTP</span><span class="chip c-htm">HTM</span><span class="chip c-ttp">TTP</span></td></tr>
+          <tr><td><code>htm_load_tote</code></td><td>relay_to_pps, pps_to_relay, relay_to_conveyor, conveyor_to_block (+ cond tote_move_task handoff)</td><td><span class="chip c-htm">HTM</span><span class="chip c-ttp">TTP</span></td></tr>
+          <tr><td><code>set_fork_height_to_htm_bot_maxdown_height</code></td><td>relay_to_pps, relay_to_conveyor, bot_transport (+ cond tote_move_task)</td><td><span class="chip c-htm">HTM</span><span class="chip c-ttp">TTP</span></td></tr>
+          <tr><td><code>set_fork_height_to_entry_height_without_tote</code></td><td>relay_to_pps, relay_to_conveyor, tote_move_task</td><td><span class="chip c-htm">HTM</span><span class="chip c-ttp">TTP</span></td></tr>
+          <tr><td><code>set_fork_height_to_htm_bot_for_pps</code></td><td>relay_to_pps, pps_to_relay, relay_to_conveyor (+ cond tote_move_task)</td><td><span class="chip c-htm">HTM</span><span class="chip c-ttp">TTP</span></td></tr>
+          <tr><td><code>compute_tote_store</code></td><td>relay_to_pps, pps_to_relay</td><td><span class="chip c-htm">HTM</span></td></tr>
+          <tr><td><code>set_relay_group_task_status</code></td><td>relay_group_task (parent), relay_tote_task (child notifies parent)</td><td><span class="chip c-vtm">VTM</span></td></tr>
+          <tr><td><code>set_relay_tote_task_status</code></td><td>relay_group_task, relay_tote_task</td><td><span class="chip c-vtm">VTM</span></td></tr>
+          <tr><td><code>vtm_aisle_checkpoint</code></td><td>relay_group_task, relay_tote_task</td><td><span class="chip c-vtm">VTM</span></td></tr>
+          <tr><td><code>pre_fork_clear</code></td><td>relay_group_task, relay_tote_task</td><td><span class="chip c-vtm">VTM</span></td></tr>
+          <tr><td><code>deassign_currenttask</code></td><td>relay_group_task (failure), dummy_tote_relay_task (loop exit)</td><td><span class="chip c-vtm">VTM</span></td></tr>
+          <tr><td><code>set_dummy_tote_relay_task_status</code></td><td>dummy_tote_relay_task (parent), tote_move_relay_task (child notifies parent)</td><td><span class="chip c-vtm">VTM</span></td></tr>
+          <tr><td><code>set_tote_move_relay_task_status</code></td><td>dummy_tote_relay_task, tote_move_relay_task</td><td><span class="chip c-vtm">VTM</span></td></tr>
+          <tr><td><code>check_rack_tasks</code></td><td>picktask (pps_complete), store_task</td><td><span class="chip c-rtp">RTP</span></td></tr>
+          <tr><td><code>lift [1]</code></td><td>picktask (pps_control, storing), store_task</td><td><span class="chip c-rtp">RTP</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card">
+      <div class="card-title">One-to-One Relationships — Task-exclusive Subtasks</div>
+      <p style="font-size:11px;color:var(--text-dim);line-height:1.7;margin-bottom:10px;">
+        These subtasks are tightly coupled to exactly one task type. They represent task-specific logic that should remain encapsulated within a single workflow module in the target architecture.
+      </p>
+      <table>
+        <thead><tr><th>Subtask</th><th>Exclusive to</th><th>Bot</th></tr></thead>
+        <tbody>
+          <tr><td><code>lift [0]</code></td><td>picktask (rack pick-up)</td><td><span class="chip c-rtp">RTP</span></td></tr>
+          <tr><td><code>goto_store</code></td><td>store_task</td><td><span class="chip c-rtp">RTP</span></td></tr>
+          <tr><td><code>goto_deepest_store_location</code></td><td>store_task (n-deep variant)</td><td><span class="chip c-rtp">RTP</span></td></tr>
+          <tr><td><code>reserve_coordinates_or_wait</code></td><td>picktask (ARA PPS only)</td><td><span class="chip c-rtp">RTP</span></td></tr>
+          <tr><td><code>wait_for_plc</code></td><td>picktask (ARA PPS only)</td><td><span class="chip c-rtp">RTP</span></td></tr>
+          <tr><td><code>allow_operator / block_operator</code></td><td>picktask (ARA PPS only)</td><td><span class="chip c-rtp">RTP</span></td></tr>
+          <tr><td><code>waiting_for_safe_to_drop</code></td><td>relay_to_conveyor</td><td><span class="chip c-htm">HTM</span></td></tr>
+          <tr><td><code>compute_tote_drop_conveyor</code></td><td>relay_to_conveyor</td><td><span class="chip c-htm">HTM</span></td></tr>
+          <tr><td><code>publish_container_lifted</code></td><td>relay_to_conveyor</td><td><span class="chip c-htm">HTM</span></td></tr>
+          <tr><td><code>goto_exit_queue_end</code></td><td>relay_to_pps</td><td><span class="chip c-htm">HTM</span></td></tr>
+          <tr><td><code>goto_reverse_exit</code></td><td>relay_to_pps</td><td><span class="chip c-htm">HTM</span></td></tr>
+          <tr><td><code>waiting_after_pick</code></td><td>conveyor_to_block</td><td><span class="chip c-htm">HTM</span></td></tr>
+          <tr><td><code>set_relay_pps_task_complete</code></td><td>block_to_queue</td><td><span class="chip c-htm">HTM</span></td></tr>
+          <tr><td><code>set_fork_height_to_entry_height_with_tote</code></td><td>tote_move_task (TTP travel with tote)</td><td><span class="chip c-ttp">TTP</span></td></tr>
+          <tr><td><code>check_and_assign_dummy_loop</code></td><td>tote_move_task (VTM buffer pre-fill trigger)</td><td><span class="chip c-ttp">TTP</span></td></tr>
+          <tr><td><code>set_current_relay_tote_task</code></td><td>relay_group_task (child binding)</td><td><span class="chip c-vtm">VTM</span></td></tr>
+          <tr><td><code>fetch_relay_tote_task_destination</code></td><td>relay_group_task (destination resolution)</td><td><span class="chip c-vtm">VTM</span></td></tr>
+          <tr><td><code>update_unload_location</code></td><td>relay_group_task (dynamic slot at put time)</td><td><span class="chip c-vtm">VTM</span></td></tr>
+          <tr><td><code>update_task_after_tote_action_failure</code></td><td>relay_group_task (failure path)</td><td><span class="chip c-vtm">VTM</span></td></tr>
+          <tr><td><code>set_current_tote_move_relay_task</code></td><td>dummy_tote_relay_task (child binding)</td><td><span class="chip c-vtm">VTM</span></td></tr>
+          <tr><td><code>set_current_task_in_dummy_tote_relay_task</code></td><td>dummy_tote_relay_task (loop tracking)</td><td><span class="chip c-vtm">VTM</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ TAB 6: EVENT TAXONOMY ═══ -->
+<div id="tab-events" class="content">
+  <div class="card">
+    <div class="card-title">Inbound Events (System → Task Engine)</div>
+    <table>
+      <thead><tr><th>Event</th><th>Source</th><th>Bot Categories</th><th>Effect</th></tr></thead>
+      <tbody>
+        <tr><td><code>task_created</code></td><td>Task scheduler / WMS</td><td>All</td><td>Initialise task; select bot; generate first subtask list</td></tr>
+        <tr><td><code>bot_reached_destination</code></td><td>Bot firmware / VDA5050</td><td>All</td><td>Advance status machine; generate next subtask</td></tr>
+        <tr><td><code>rack_lifted / rack_lowered</code></td><td>Bot firmware</td><td><span class="chip c-rtp">RTP</span></td><td>Transition → move_to_pps / task_complete</td></tr>
+        <tr><td><code>fork_pick_complete / fork_put_complete</code></td><td>Bot firmware / VDA5050</td><td><span class="chip c-ttp">TTP</span><span class="chip c-vtm">VTM</span><span class="chip c-htm">HTM_QT_M5F</span></td><td>Transition → next status</td></tr>
+        <tr><td><code>operator_pick_confirm</code></td><td>PPS workstation / WCS</td><td>All</td><td>Release wait_at_pps; generate next subtask</td></tr>
+        <tr><td><code>conveyor_slot_available</code></td><td>Conveyor controller</td><td><span class="chip c-htm">HTM</span></td><td>Release wait_for_conveyor_slot</td></tr>
+        <tr><td><code>relay_safe_to_drop</code></td><td>Kafka (<code>mark_safe_to_drop</code>)</td><td><span class="chip c-htm">HTM</span></td><td>Release wait_for_safe_drop</td></tr>
+        <tr><td><code>task_cancelled</code></td><td>WMS / operator</td><td>All</td><td>Abort subtask; navigate to home</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="card">
+    <div class="card-title">Outbound Events (Task Engine → System)</div>
+    <table>
+      <thead><tr><th>Event / Kafka Message</th><th>Publisher</th><th>Saga-wrapped?</th><th>Triggered When</th></tr></thead>
+      <tbody>
+        <tr><td><code>mark_safe_to_drop_false</code></td><td>relay_pps_subtasks.erl:2764</td><td><span style="color:var(--green);font-weight:700;">✅ gen_saga inside ?MNESIA_TRANSACTION</span></td><td>HTM picks tote from relay storable</td></tr>
+        <tr><td><code>tote_arrived_at_pps</code></td><td>relay_pps_subtasks.erl</td><td><span style="color:var(--red);font-weight:700;">❌ Direct kafka_produce_sync</span></td><td>Bot reaches PPS with tote</td></tr>
+        <tr><td><code>task_status_update</code></td><td>relay_pps_subtasks.erl</td><td><span style="color:var(--red);font-weight:700;">❌ Direct</span></td><td>Each status transition</td></tr>
+        <tr><td><code>pick_completed</code></td><td>pick_kafka_publisher</td><td><span style="color:var(--red);font-weight:700;">❌ Direct</span></td><td>Operator confirms pick at PPS</td></tr>
+        <tr><td><code>bot_assigned</code></td><td>fleet management</td><td>N/A</td><td>Bot allocated to task</td></tr>
+      </tbody>
+    </table>
+    <div class="warn" style="margin-top:10px;">🔥 4 of 5 subtask-level Kafka calls bypass saga — events can fire on rolled-back Mnesia transactions. Reference fix pattern: <code>mark_safe_to_drop_false</code> at line 2764. Modularisation Epic 3 addresses this systematically. See <code>apps/butler_shared/doc/kafka.md</code>.</div>
+  </div>
+</div>
+
+<!-- ═══ TAB 7: EXECUTION ENGINE ═══ -->
+<div id="tab-engine" class="content">
+  <div class="card">
+    <div class="card-title">Current Architecture — Dispatch Model <span class="src">relay_pps_subtasks.erl · butler_situation.erl</span></div>
+    <div class="info">ℹ️ Flat pattern-match dispatch. Each new station design or bot type requires adding clauses to <code>subtask_list/5,6</code> and <code>process/1</code>. No behaviour contract, no capability declaration, no plug-in interface.</div>
+    <div class="grid2">
+      <div>
+        <h3>Task Status → Subtask Resolution</h3>
+        <table>
+          <thead><tr><th>Function</th><th>Inputs</th><th>Output</th></tr></thead>
+          <tbody>
+            <tr><td><code>subtask_list/5</code></td><td>TaskType, Status, BotId, StationId, Ctx</td><td>List of subtask atoms</td></tr>
+            <tr><td><code>subtask_list/6</code></td><td>+ extra predicate arg</td><td>List of subtask atoms</td></tr>
+            <tr><td><code>process/1</code></td><td>SubtaskAtom</td><td>Side-effects: nav cmd / Kafka / DB write</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <h3>Bot Category Branching</h3>
+        <table>
+          <thead><tr><th>Mechanism</th><th>Where</th><th>Checks</th></tr></thead>
+          <tbody>
+            <tr><td>Macro guard</td><td>subtask_list clause heads</td><td><code>?RTP_BOTS</code> <code>?TTP_BOTS</code> <code>?HTM_BOTS</code> <code>?VTM_BOTS</code></td></tr>
+            <tr><td>Capability predicate</td><td>Inside clause body</td><td><code>is_fork_enabled_bot/1</code> → <code>?FORK_ENABLED_BOTS</code></td></tr>
+            <tr><td>Profile lookup</td><td>ranger_profile.erl</td><td><code>get_velocity_profile/1</code> → sys.config <code>velocity_profile_map</code></td></tr>
+            <tr><td>Secondary profile</td><td>butler_type config</td><td><code>secondary_movement_profile</code> (HTM only)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function showTab(id, el) {
+  document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  el.classList.add('active');
+}
+let activeFilter = 'all', searchTerm = '';
+function filterBots(cat, btn) {
+  activeFilter = cat;
+  document.querySelectorAll('.fb').forEach(b => { b.className = 'fb'; });
+  btn.classList.add('a-' + cat);
+  applyFilter();
+}
+function searchBots(v) { searchTerm = v.toLowerCase(); applyFilter(); }
+function applyFilter() {
+  document.querySelectorAll('.bc').forEach(c => {
+    const catOk = activeFilter === 'all' || c.dataset.cat === activeFilter;
+    const nameOk = !searchTerm || c.dataset.name.includes(searchTerm);
+    c.classList.toggle('hidden', !(catOk && nameOk));
+  });
+}
+
+// ── Relationship Matrix ──────────────────────────────────────────────
+// 14 task types: RTP(2) + HTM(6) + TTP(2) + VTM(4)
+// Cell values: '' = not used, '✓' = used, 'c' = conditional
+const TASKS = ['picktask','store_task','relay_to_pps','pps_to_relay','relay_to_conveyor','conveyor_to_block','block_to_queue','bot_transport','rangergrouptask','tote_move_task','relay_group_task','relay_tote_task','dummy_tote_relay_task','tote_move_relay_task'];
+const TASK_CAT = ['rtp','rtp','htm','htm','htm','htm','htm','all','ttp','ttp','vtm','vtm','vtm','vtm'];
+const matrixData = [
+  // [label, shared?, pt, st, r2p, p2r, r2c, c2b, b2q, bt, rgt, tmt, rlgt, rlt, dtrt, tmrt]
+  ['goto_barcode',                                        true,  '✓','✓','✓','✓','✓','✓','✓','✓','✓','✓','✓','✓','✓','✓'],
+  ['lift [0]  (rack pick-up)',                            false, '✓','','','','','','','', '','','','','',''],
+  ['lift [1]  (rack store)',                              false, 'c','✓','','','','','','', '','','','','',''],
+  ['goto_store',                                          false, 'c','✓','','','','','','', '','','','','',''],
+  ['goto_deepest_store_location',                         false, '','c','','','','','','',  '','','','','',''],
+  ['check_rack_tasks',                                    false, '✓','✓','','','','','','', '','','','','',''],
+  ['reserve_coordinates_or_wait',                         false, 'c','','','','','','','',  '','','','','',''],
+  ['wait_for_plc',                                        false, 'c','','','','','','','',  '','','','','',''],
+  ['allow_operator / block_operator',                     false, 'c','','','','','','','',  '','','','','',''],
+  ['pps_control',                                         true,  '✓','','✓','','✓','','','', 'c','c','','','',''],
+  ['set_task_complete',                                   false, '✓','','','','','','','', '','✓','','','',''],
+  ['set_movetask_complete',                               false, '','✓','','','','','','', '','','','','',''],
+  ['htm_load_tote',                                       true,  '','','✓','✓','✓','✓','','', '','c','','','',''],
+  ['set_fork_height_to_htm_bot_maxdown_height',           true,  '','','✓','','✓','','','✓', '','c','','','',''],
+  ['set_fork_height_to_entry_height_without_tote',        true,  '','','✓','','✓','','','', '','✓','','','',''],
+  ['set_fork_height_to_htm_bot_for_pps',                  true,  '','','✓','c','✓','','','', '','c','','','',''],
+  ['compute_tote_store',                                  true,  '','','✓','✓','','','','', '','','','','',''],
+  ['compute_tote_drop',                                   false, '','','✓','','','','','',  '','','','','',''],
+  ['compute_tote_drop_conveyor',                          false, '','','','','✓','','','',  '','','','','',''],
+  ['goto_defined_destinations',                           false, '','','','✓','','','','',  '','','','','',''],
+  ['goto_exit_queue_end',                                 false, '','','✓','','','','','',  '','','','','',''],
+  ['goto_reverse_exit',                                   false, '','','✓','','','','','',  '','','','','',''],
+  ['check_same_tote_task',                                false, '','','✓','','','','','',  '','','','','',''],
+  ['waiting_for_safe_to_drop',                            false, '','','','','✓','','','',  '','','','','',''],
+  ['publish_container_lifted',                            false, '','','','','✓','','','',  '','','','','',''],
+  ['waiting_after_pick',                                  false, '','','','','','✓','','',  '','','','','',''],
+  ['set_relay_pps_task_complete',                         false, '','','','','','','✓','',  '','','','','',''],
+  ['set_outbound_relay_pps_task_complete',                false, '','','','','','','✓','',  '','','','','',''],
+  ['wait_for_dependency_clearance',                       false, '','','✓','','','','','',  '','','','','',''],
+  // ── TTP shared primitives ──
+  ['pre_load_unload_action',                              true,  '','','','','','','','',  '','✓','✓','✓','✓','✓'],
+  ['load_tote',                                           true,  '','','','','','','','',  '','✓','✓','✓','✓','✓'],
+  ['unload_tote',                                         true,  '','','','','','','','',  '','✓','✓','✓','✓','✓'],
+  ['set_fork_height_to_entry_height_with_tote',           false, '','','','','','','','',  '','✓','','','',''],
+  ['htm_unload_tote (TTP↔HTM handoff)',                   false, '','','','','','','','',  '','c','','','',''],
+  ['going_to_exit_queue (TTP PPS exit)',                  false, '','','','','','','','',  '','c','','','',''],
+  ['check_and_assign_dummy_loop',                         false, '','','','','','','','',  '','✓','','','',''],
+  // ── VTM navigation & aisle ──
+  ['vtm_aisle_checkpoint',                                false, '','','','','','','','',  '','','✓','✓','',''],
+  ['pre_fork_clear',                                      false, '','','','','','','','',  '','','✓','✓','',''],
+  // ── VTM relay_group_task state management ──
+  ['set_current_relay_tote_task',                         false, '','','','','','','','',  '','','✓','','',''],
+  ['set_relay_group_task_status',                         false, '','','','','','','','',  '','','✓','✓','',''],
+  ['set_relay_tote_task_status',                          false, '','','','','','','','',  '','','✓','✓','',''],
+  ['fetch_relay_tote_task_destination',                   false, '','','','','','','','',  '','','✓','','',''],
+  ['update_unload_location',                              false, '','','','','','','','',  '','','✓','','',''],
+  ['update_task_after_tote_action_failure',               false, '','','','','','','','',  '','','✓','','',''],
+  ['deassign_currenttask',                                false, '','','','','','','','',  '','','✓','','✓',''],
+  // ── VTM dummy_tote_relay_task state management ──
+  ['set_current_tote_move_relay_task',                    false, '','','','','','','','',  '','','','','✓',''],
+  ['set_current_task_in_dummy_tote_relay_task',           false, '','','','','','','','',  '','','','','✓',''],
+  ['set_dummy_tote_relay_task_status',                    false, '','','','','','','','',  '','','','','✓','✓'],
+  ['set_tote_move_relay_task_status',                     false, '','','','','','','','',  '','','','','✓','✓'],
+];
+
+function buildMatrix() {
+  const tbody = document.getElementById('matrixBody');
+  if (!tbody) return;
+  const catColors = {rtp:'var(--rtp)',htm:'var(--htm)',ttp:'var(--ttp)',vtm:'var(--vtm)',all:'var(--text-dim)'};
+
+  matrixData.forEach(row => {
+    const [label, shared, ...cells] = row;
+    const usedCount = cells.filter(c => c && c !== '').length;
+    const tr = document.createElement('tr');
+
+    // label cell
+    const tdLabel = document.createElement('td');
+    tdLabel.innerHTML = `<code style="font-size:10px;">${label}</code>`;
+    tr.appendChild(tdLabel);
+
+    // task cells
+    cells.forEach((val, i) => {
+      const td = document.createElement('td');
+      td.style.textAlign = 'center';
+      if (val === '✓') {
+        const color = catColors[TASK_CAT[i]] || 'var(--green)';
+        td.innerHTML = `<span style="color:${color};font-size:14px;font-weight:700;">●</span>`;
+        td.style.background = 'rgba(61,214,140,0.05)';
+      } else if (val === 'c') {
+        td.innerHTML = `<span style="color:var(--yellow);font-size:11px;font-weight:600;">cond</span>`;
+        td.style.background = 'rgba(245,197,66,0.05)';
+      } else {
+        td.innerHTML = `<span style="color:var(--text-muted);font-size:12px;">·</span>`;
+      }
+      tr.appendChild(td);
+    });
+
+    // cardinality cell
+    const tdCard = document.createElement('td');
+    if (usedCount === 0) {
+      tdCard.textContent = '—';
+    } else if (usedCount === 1) {
+      tdCard.innerHTML = `<span style="color:var(--text-dim);font-size:10px;font-weight:600;">1 task (1:M)</span>`;
+    } else {
+      tdCard.innerHTML = `<span style="color:var(--cyan);font-size:10px;font-weight:700;">${usedCount} tasks (M:M)</span>`;
+    }
+    tr.appendChild(tdCard);
+
+    tbody.appendChild(tr);
+  });
+}
+
+document.addEventListener('DOMContentLoaded', buildMatrix);
+</script>
+</body>
+</html>
