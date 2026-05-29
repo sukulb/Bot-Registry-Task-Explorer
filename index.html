@@ -132,13 +132,24 @@ input.sb:focus{border-color:var(--accent);}
 .flow-row{display:flex;align-items:center;flex-wrap:wrap;gap:0;margin-bottom:6px;}
 .fn{background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:5px 11px;font-size:11px;font-weight:600;white-space:nowrap;}
 .fa{color:var(--text-muted);padding:0 7px;font-size:13px;}
+
+/* ── VDA swimlane flow rows ───────────────────────────────────── */
+.sw-cell{padding:4px 7px;border-bottom:1px solid rgba(255,255,255,0.04);min-height:28px;display:flex;align-items:center;}
+.sw-gmc{background:rgba(100,200,255,0.04);}
+.sw-mid{background:rgba(255,255,255,0.02);flex-direction:column;align-items:flex-start;gap:1px;}
+.sw-fw{background:rgba(255,160,80,0.04);}
+.sw-src{font-size:9px;font-weight:700;color:var(--text-dim);}
+.sw-arrow{display:inline-block;font-size:11px;margin-right:4px;}
+.sw-arrow.sw-right::before{content:"→";color:var(--cyan);}
+.sw-arrow.sw-left::before{content:"←";color:var(--green);}
+
 </style>
 </head>
 <body>
 
 <header>
   <h1>⚙️ Task &amp; Event Taxonomy · Bot Capability Reference</h1>
-  <div class="sub">Warehouse Automation Platform · Erlang/OTP · 4 bot categories · 28 variants · Code: <code>relay_pps_subtasks.erl</code> · <code>ranger_profile.erl</code> · <code>sys.config</code> · <code>gmc.hrl</code> · Hardware specs: Highspot datasheets (Ranger™ RTP M 3.0 · HAI HTM H · HTM QT F · HAI A42T(D)-E1 · HAI A42T-L-E2-H · QT VTM Gripper variants) · quicktron.com (M100 · M60 · H80 · C56) · hairobotics.com (A42 · A42T family)</div>
+  <div class="sub">Warehouse Automation Platform · Erlang/OTP · 4 bot categories · 28 variants</div>
 </header>
 
 <div class="tabs">
@@ -148,6 +159,7 @@ input.sb:focus{border-color:var(--accent);}
   <div class="tab" onclick="showTab('diagram',this)">🔗 Relationships</div>
   <div class="tab" onclick="showTab('events',this)">📡 Event Taxonomy</div>
   <div class="tab" onclick="showTab('engine',this)">⚡ Execution Engine</div>
+  <div class="tab" onclick="showTab('vda',this)">🔌 VDA Interface</div>
 </div>
 
 <!-- ═══ TAB 1: BOT REGISTRY ═══ -->
@@ -391,6 +403,7 @@ input.sb:focus{border-color:var(--accent);}
     <div><div class="cl">Battery</div><div class="cv">LFP · Auto-charging</div></div>
     <div><div class="cl">Certification</div><div class="cv">CE · NRTL</div></div>
     <div><div class="cl">Obstacle Avoidance</div><div class="cv">Safety LiDAR (front+rear) · Obstacle detect · Anti-collision · E-stop</div></div>
+    <div><div class="cl">Storage Depth</div><div class="cv" style="color:var(--green);">N-deep 2 (triple-deep)</div></div>
   </div>
   <div class="sbw"><div class="sbl"><span>Travel Speed</span><span>1500 mm/s · Fork: 0.55 mm/ms</span></div><div class="sbb"><div class="sbf" style="width:37.5%;background:var(--ttp)"></div></div></div>
   <div style="margin-top:7px;display:flex;flex-wrap:wrap;gap:3px;">
@@ -418,6 +431,7 @@ input.sb:focus{border-color:var(--accent);}
     <div><div class="cl">Battery</div><div class="cv">LFP · Auto-charging</div></div>
     <div><div class="cl">Certification</div><div class="cv">CE · NRTL</div></div>
     <div><div class="cl">Obstacle Avoidance</div><div class="cv">Safety LiDAR (front+rear) · Obstacle detect · Anti-collision · E-stop</div></div>
+    <div><div class="cl">Storage Depth</div><div class="cv">N-deep 1 (double-deep)</div></div>
   </div>
   <div class="sbw"><div class="sbl"><span>Travel Speed</span><span>1600 mm/s · Accel: 400 mm/s²</span></div><div class="sbb"><div class="sbf" style="width:40%;background:var(--ttp)"></div></div></div>
   <div style="margin-top:7px;display:flex;flex-wrap:wrap;gap:3px;">
@@ -445,6 +459,7 @@ input.sb:focus{border-color:var(--accent);}
     <div><div class="cl">Battery</div><div class="cv">LFP · Auto-charging</div></div>
     <div><div class="cl">Certification</div><div class="cv">CE · NRTL</div></div>
     <div><div class="cl">Obstacle Avoidance</div><div class="cv">Safety LiDAR (front+rear) · Obstacle detect · Anti-collision · E-stop</div></div>
+    <div><div class="cl">Storage Depth</div><div class="cv">N-deep 1 (double-deep)</div></div>
   </div>
   <div class="sbw"><div class="sbl"><span>Travel Speed</span><span>1600 mm/s</span></div><div class="sbb"><div class="sbf" style="width:40%;background:var(--ttp)"></div></div></div>
   <div style="margin-top:7px;display:flex;flex-wrap:wrap;gap:3px;">
@@ -472,6 +487,7 @@ input.sb:focus{border-color:var(--accent);}
     <div><div class="cl">Battery</div><div class="cv">LFP · Auto-charging</div></div>
     <div><div class="cl">Certification</div><div class="cv">CE · NRTL</div></div>
     <div><div class="cl">Obstacle Avoidance</div><div class="cv">Safety LiDAR (front+rear) · Obstacle detect · Anti-collision · E-stop</div></div>
+    <div><div class="cl">Storage Depth</div><div class="cv">N-deep 1 (double-deep)</div></div>
   </div>
   <div class="sbw"><div class="sbl"><span>Travel Speed</span><span>1000 mm/s (wider footprint)</span></div><div class="sbb"><div class="sbf" style="width:25%;background:var(--ttp)"></div></div></div>
   <div style="margin-top:7px;display:flex;flex-wrap:wrap;gap:3px;">
@@ -500,6 +516,7 @@ input.sb:focus{border-color:var(--accent);}
     <div><div class="cl">Battery</div><div class="cv">LFP · Auto-charging</div></div>
     <div><div class="cl">Certification</div><div class="cv">CE · NRTL</div></div>
     <div><div class="cl">Obstacle Avoidance</div><div class="cv">Safety LiDAR (front+rear) · Anti-collision · E-stop</div></div>
+    <div><div class="cl">Storage Depth</div><div class="cv" style="color:var(--green);">N-deep 2 (triple-deep)</div></div>
   </div>
   <div class="sbw"><div class="sbl"><span>Travel Speed</span><span>1500 mm/s</span></div><div class="sbb"><div class="sbf" style="width:37.5%;background:var(--ttp)"></div></div></div>
   <div style="margin-top:7px;display:flex;flex-wrap:wrap;gap:3px;">
@@ -527,6 +544,7 @@ input.sb:focus{border-color:var(--accent);}
     <div><div class="cl">Battery</div><div class="cv">LFP · Auto-charging</div></div>
     <div><div class="cl">Certification</div><div class="cv">CE · NRTL</div></div>
     <div><div class="cl">Obstacle Avoidance</div><div class="cv">Safety LiDAR (front+rear) · Anti-collision · E-stop</div></div>
+    <div><div class="cl">Storage Depth</div><div class="cv">N-deep 1 (double-deep)</div></div>
   </div>
   <div class="sbw"><div class="sbl"><span>Travel Speed</span><span>1500 mm/s</span></div><div class="sbb"><div class="sbf" style="width:37.5%;background:var(--ttp)"></div></div></div>
   <div style="margin-top:7px;display:flex;flex-wrap:wrap;gap:3px;">
@@ -555,6 +573,7 @@ input.sb:focus{border-color:var(--accent);}
     <div><div class="cl">Battery</div><div class="cv">LFP · Auto-charging</div></div>
     <div><div class="cl">Certification</div><div class="cv">CE · NRTL</div></div>
     <div><div class="cl">Obstacle Avoidance</div><div class="cv">Safety LiDAR (front+rear) · Anti-collision · E-stop</div></div>
+    <div><div class="cl">Storage Depth</div><div class="cv" style="color:var(--green);">N-deep 2 (triple-deep)</div></div>
   </div>
   <div class="sbw"><div class="sbl"><span>Travel Speed</span><span>1600 mm/s · Accel: 500 mm/s²</span></div><div class="sbb"><div class="sbf" style="width:40%;background:var(--ttp)"></div></div></div>
   <div style="margin-top:7px;display:flex;flex-wrap:wrap;gap:3px;">
@@ -583,6 +602,7 @@ input.sb:focus{border-color:var(--accent);}
     <div><div class="cl">Battery</div><div class="cv">LFP · Auto-charging</div></div>
     <div><div class="cl">Certification</div><div class="cv">CE · NRTL</div></div>
     <div><div class="cl">Obstacle Avoidance</div><div class="cv">Safety LiDAR (front+rear) · Anti-collision · E-stop</div></div>
+    <div><div class="cl">Storage Depth</div><div class="cv">N-deep 1 (double-deep)</div></div>
   </div>
   <div class="sbw"><div class="sbl"><span>Travel Speed</span><span>1500 mm/s · Accel: 500 mm/s²</span></div><div class="sbb"><div class="sbf" style="width:37.5%;background:var(--ttp)"></div></div></div>
   <div style="margin-top:7px;display:flex;flex-wrap:wrap;gap:3px;">
@@ -871,7 +891,7 @@ input.sb:focus{border-color:var(--accent);}
   </div><!-- /botGrid -->
 
   <div class="card" style="margin-top:16px;">
-    <div class="card-title">Capability Matrix — All Bot Categories <span class="src">Verified against Highspot datasheets: Ranger™ RTP M 3.0 · HAI HTM H · HTM QT F · A42T(D)-E1 · A42T-L-E2-H · QT VTM Single/Double deep Gripper · QT VTM Single deep Gripper Plus</span></div>
+    <div class="card-title">Capability Matrix — All Bot Categories</div>
     <table>
       <thead>
         <tr><th>Capability Dimension</th><th style="color:var(--rtp)">RTP (7)</th><th style="color:var(--ttp)">TTP (8)</th><th style="color:var(--htm)">HTM (4)</th><th style="color:var(--vtm)">VTM (5)</th><th>Source</th></tr>
@@ -891,7 +911,7 @@ input.sb:focus{border-color:var(--accent);}
         <tr><td><strong>Battery Type</strong><i class="tip-i" data-tip="Battery chemistry affects charge time, cycle life, and safety. LFP (Lithium Iron Phosphate): safe, 3 000+ cycles, standard. LTO (Lithium Titanate): 16-min fast charge, 10 000+ cycles, lower energy density. Li-ion: higher energy density, shorter cycle life.">i</i></td><td>Li-ion 52V/40Ah (RTP M 3.0) · LFP (QT variants)</td><td>LFP · Auto-charging (all HAI A42 family)</td><td>LTO 48V/10Ah (hai_relay_K50 · 16min charge · 10k cycles) · LFP 51.2V/21Ah (HTM_QT_M5F · 2000 cycles)</td><td>LFP (HAI ≥3000 cycles) · LFP 48V/42Ah (QT · 2000 cycles)</td><td>Highspot datasheets · hairobotics.com · quicktron.com</td></tr>
         <tr><td><strong>Typical Runtime</strong><i class="tip-i" data-tip="Estimated operating time per charge cycle under normal warehouse load. Actual runtime varies with payload weight, travel distance, and ambient temperature.">i</i></td><td>12–14 h (RTP M 3.0) · 7.5 h (M100) · 9 h (M60) · &gt;8 h (H80)</td><td>—</td><td>≥3.5 h at 30kg (hai_relay_K50) · &gt;12 h (HTM_QT_M5F)</td><td>6–8 h (QT C56 variants)</td><td>Highspot datasheets · quicktron.com</td></tr>
         <tr><td><strong>Navigation System</strong><i class="tip-i" data-tip="Specific navigation technology deployed. Proprietary (GO): GreyOrange-only QR grid, non-VDA. QR code grid (QT): open QR marker tiles, ±10 mm, VDA5050. DM+Inertial (HAI): DataMatrix visual markers fused with wheel odometry.">i</i></td><td>Proprietary (GO) · QR code grid ±10mm (QT: M100/M60/H80)</td><td>Inertial + visual markers (Hai A42 family) · CE+NRTL certified</td><td>QR Code + Inertial (all variants)</td><td>Inertial + DM code (HAI) · QR Code floor grid (QT)</td><td>Datasheets · quicktron.com · sys.config</td></tr>
-        <tr><td><strong>Storage Depth</strong><i class="tip-i" data-tip="Single deep: one tote per pick face per aisle. Double deep: two totes stacked per face — needs telescopic reach, reduces required aisle count by ~30% but adds sequence dependency (outer tote must be moved to reach inner).">i</i></td><td>N/A (whole rack)</td><td>Single deep (fork extends per level)</td><td>N/A</td><td>Double deep (A42T-D-E1 · QT ST_2D) · Single or Double (A42T-L-E2-H) · Single (QT GT_2D Gripper Plus)</td><td>Datasheets</td></tr>
+        <tr><td><strong>Storage Depth</strong><i class="tip-i" data-tip="N-deep: how many totes share a single pick face in the aisle depth direction. 0-deep = front slot only (STORAGE_SHELF). 1-deep = front + one behind (STORAGE_SHELF_DEEP1). 2-deep = front + two behind (STORAGE_SHELF_DEEP2, triple-deep). Deeper slots require extScan to locate the target tote before fork retrieval; blocking totes must be relocated first.">i</i></td><td>N/A (whole rack)</td><td><strong>N-deep</strong> — all variants min 1-deep (double-depth shelves). 2-deep (triple): A42D · A42TD_L_E1 · A42D_L_E4. 1-deep: A42N · A42G_E4 · A42X_E4 · A42TL_E1 · A42T_L_E1. extScan dispatched by GMC when ndeep &gt; 0.</td><td>N/A</td><td>Double deep (A42T-D-E1 · QT ST_2D) · Single or Double (A42T-L-E2-H) · Single (QT GT_2D Gripper Plus)</td><td>Ranger TTP Velocity Profile Matrix (Confluence RPP)</td></tr>
         <tr><td><strong>VDA5050 Protocol</strong><i class="tip-i" data-tip="VDA5050 is the open ISO standard for AGV/AMR fleet communication with WCS/WMS. Non-VDA bots require GreyOrange proprietary integration and cannot be orchestrated by third-party fleet managers.">i</i></td><td>❌ GO bots: proprietary.<br>✅ Quicktron variants: M100, M60, H80D_XH, M100C_C</td><td>✅ All 8 variants</td><td>✅ All 4 variants</td><td>✅ All 5 variants</td><td><code>?VDA_PROTO_BOTS</code> gmc.hrl · sys.config:butler_type</td></tr>
         <tr><td><strong>Bi-directional Movement</strong><i class="tip-i" data-tip="Movement profile code controlling direction-change behavior. _01: front-face only. _02: bi-dir, rotates at junctions. _04: back-face. _05: bi-dir + destination-orientation check both ways + rotate-after-rotate. _06: bi-dir + always rotates before moving. _07/_08: primary/secondary slow profiles.">i</i></td><td>_01 (front-face, QT) or _02 (bi-dir, GO) or _04 (back-face, CleanZone)</td><td>_05 (bi-dir + dest-orient check both ways + rotate_after_rotate)</td><td>_07 primary (front-face + dest-check) / _08 slow secondary (back-face)</td><td>_06 (bi-dir + always rotate_after_rotate)</td><td>sys.config: <code>bi_directional_movement</code> in <code>butler_type</code></td></tr>
         <tr><td><strong>Secondary Velocity Profile</strong><i class="tip-i" data-tip="A reduced-speed movement profile for precision docking (e.g. final approach to a conveyor or relay station). Only HTM bots currently use this — allows slow, accurate alignment independent of normal travel speed.">i</i></td><td>❌ Single profile</td><td>❌ Single profile</td><td>✅ All HTM bots: slow-docking profile. HTM_QT_M5F/hai_relay_K50: 300 mm/s. K50_L/X_E1: 1000 mm/s</td><td>❌ Single profile</td><td>sys.config: <code>secondary_movement_profile</code> in <code>butler_type</code></td></tr>
@@ -1416,6 +1436,490 @@ input.sb:focus{border-color:var(--accent);}
     <div class="warn" style="margin-top:10px;">🔥 4 of 5 subtask-level Kafka calls bypass saga — events can fire on rolled-back Mnesia transactions. Reference fix pattern: <code>mark_safe_to_drop_false</code> at line 2764. Modularisation Epic 3 addresses this systematically. See <code>apps/butler_shared/doc/kafka.md</code>.</div>
   </div>
 </div>
+
+
+<!-- ═══ VDA INTERFACE TAB ═══ -->
+<div id="tab-vda" class="content">
+
+<!-- ── Architecture Overview ──────────────────────────────────────────── -->
+<div class="card">
+  <div class="card-title">VDA Remote — Architecture &amp; Protocol <span class="src">vda5050_v2.erl · vda5050.erl · gmc_ttp_vda_SUITE.erl · Confluence: RTTP VDA Messages Contract v1.23.0</span></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;">
+    <div>
+      <h3 style="font-size:11px;color:var(--text-dim);margin-bottom:8px;">LAYER STACK</h3>
+      <div style="display:flex;flex-direction:column;gap:4px;font-size:11px;">
+        <div style="background:#1e2a20;border:1px solid var(--green);border-radius:6px;padding:7px 12px;"><strong style="color:var(--green);">GreyMatter / GMC</strong> <span style="color:var(--text-dim);font-size:10px;">— fleet orchestrator · Mnesia state · saga promises</span></div>
+        <div style="text-align:center;color:var(--text-muted);font-size:16px;line-height:1;">⇅</div>
+        <div style="background:#1a2030;border:1px solid var(--cyan);border-radius:6px;padding:7px 12px;"><strong style="color:var(--cyan);">VDARemote</strong> <span style="color:var(--text-dim);font-size:10px;">— VDA5050 v2.0.0 dialect · MQTT · message translation</span></div>
+        <div style="text-align:center;color:var(--text-muted);font-size:16px;line-height:1;">⇅</div>
+        <div style="background:#2a1a10;border:1px solid var(--orange);border-radius:6px;padding:7px 12px;"><strong style="color:var(--orange);">Bot Firmware</strong> <span style="color:var(--text-dim);font-size:10px;">— kubot (HAI) · QT FW · executes motion &amp; end-effector cmds</span></div>
+      </div>
+    </div>
+    <div>
+      <h3 style="font-size:11px;color:var(--text-dim);margin-bottom:8px;">MQTT TOPICS <code style="font-size:9px;">/{manufacturer}/{serialNumber}/{topic}</code></h3>
+      <table style="font-size:10px;width:100%;">
+        <thead><tr><th>Topic</th><th>Direction</th><th>QoS</th><th>Retained</th></tr></thead>
+        <tbody>
+          <tr><td><code>/order</code></td><td style="color:var(--cyan);">GMC → Bot</td><td>1</td><td>—</td></tr>
+          <tr><td><code>/instantActions</code></td><td style="color:var(--cyan);">GMC → Bot</td><td>1</td><td>—</td></tr>
+          <tr><td><code>/state</code></td><td style="color:var(--green);">Bot → GMC</td><td>1</td><td>—</td></tr>
+          <tr><td><code>/connection</code></td><td style="color:var(--green);">Bot → GMC</td><td>1</td><td>✅ yes</td></tr>
+          <tr><td><code>/factsheet</code></td><td style="color:var(--green);">Bot → GMC</td><td>1</td><td>—</td></tr>
+        </tbody>
+      </table>
+      <div style="margin-top:8px;font-size:10px;color:var(--text-dim);">
+        <strong>Blocking types:</strong>
+        <code style="color:var(--red);">HARD</code> = exclusive, bot stopped ·
+        <code style="color:var(--yellow);">SOFT</code> = parallel, bot stopped ·
+        <code style="color:var(--green);">NONE</code> = parallel, bot moving<br>
+        <strong>manufacturer</strong> derived from server config, always lowercase in topic · <strong>serialNumber</strong> integer part only
+      </div>
+    </div>
+  </div>
+  <div class="info">ℹ️ VDA5050 v2.0.0 dialect — all messages carry <code>"version":"2.0.0"</code>. <code>headerId</code> incremented from 1 per topic independently by both GMC and VDARemote; no logical decisions made on it. <code>actionId</code> format: <code>&lt;actionName&gt;_&lt;uuid4&gt;</code>. Multiple actions per node are <strong>not supported</strong> — always single action or empty list.</div>
+</div>
+
+<!-- ── RTP Workflow ───────────────────────────────────────────────────── -->
+<div class="epic">
+  <div class="eh" style="border-left:3px solid var(--rtp);">
+    <span class="chip c-rtp" style="font-size:11px;">RTP</span>
+    <h4>Rack-to-Person Event Workflow</h4>
+    <span style="font-size:11px;color:var(--text-dim);">GO (proprietary) · Quicktron M100 / M60 / H80 / M100C (VDA5050)</span>
+    <span class="chip c-novda" style="margin-left:auto;">GO = No VDA</span>
+    <span class="chip c-vda">QT = VDA5050</span>
+  </div>
+  <div class="eb" style="padding:0;">
+    <div style="padding:12px 14px;">
+
+      <!-- Lifecycle swimlane -->
+      <div style="font-size:10px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px;">Full Rack-Pick Lifecycle (QT VDA bots)</div>
+      <div style="display:grid;grid-template-columns:90px 1fr 90px;gap:0;font-size:10px;margin-bottom:14px;">
+        <!-- Headers -->
+        <div style="background:var(--surface2);border-radius:6px 0 0 0;padding:5px 8px;text-align:center;font-weight:700;color:var(--cyan);">GMC</div>
+        <div style="background:var(--surface2);padding:5px 8px;text-align:center;font-weight:700;color:var(--text-dim);">VDARemote · MQTT</div>
+        <div style="background:var(--surface2);border-radius:0 6px 0 0;padding:5px 8px;text-align:center;font-weight:700;color:var(--orange);">Bot FW</div>
+        <!-- Row 1: Connection -->
+        <div class="sw-cell sw-gmc"></div>
+        <div class="sw-cell sw-mid"><span class="sw-arrow sw-right"></span><code>/connection ONLINE</code> (retained, QoS 1)</div>
+        <div class="sw-cell sw-fw sw-src">Power on</div>
+        <!-- Row 2: Init -->
+        <div class="sw-cell sw-gmc sw-src">send initRequest</div>
+        <div class="sw-cell sw-mid"><span class="sw-arrow sw-right"></span><code>/instantActions · initRequest HARD</code></div>
+        <div class="sw-cell sw-fw"></div>
+        <!-- Row 3: Init ack -->
+        <div class="sw-cell sw-gmc"></div>
+        <div class="sw-cell sw-mid"><span class="sw-arrow sw-left"></span><code>/state · actionStatus: FINISHED</code></div>
+        <div class="sw-cell sw-fw sw-src">rack-lift init done</div>
+        <!-- Row 4: Factsheet -->
+        <div class="sw-cell sw-gmc"></div>
+        <div class="sw-cell sw-mid"><span class="sw-arrow sw-left"></span><code>/factsheet</code> (agvGeometry · physicalParameters · loadSpecification)</div>
+        <div class="sw-cell sw-fw"></div>
+        <!-- Row 5: Move to storage -->
+        <div class="sw-cell sw-gmc sw-src">assign picktask</div>
+        <div class="sw-cell sw-mid"><span class="sw-arrow sw-right"></span><code>/order · multi_step_move_command</code> (nodes+edges, released:true)</div>
+        <div class="sw-cell sw-fw"></div>
+        <!-- Row 6: State while moving -->
+        <div class="sw-cell sw-gmc"></div>
+        <div class="sw-cell sw-mid"><span class="sw-arrow sw-left"></span><code>/state · driving:true · nodeStates/edgeStates populated</code></div>
+        <div class="sw-cell sw-fw sw-src">traversing grid</div>
+        <!-- Row 7: pick (rack lift) -->
+        <div class="sw-cell sw-gmc"></div>
+        <div class="sw-cell sw-mid"><span class="sw-arrow sw-right"></span><code>/order · node action: pick HARD · stationType:STORAGE_SHELF · loadType:RACK</code></div>
+        <div class="sw-cell sw-fw"></div>
+        <!-- Row 8: pick ack -->
+        <div class="sw-cell sw-gmc sw-src">rack_lift_success</div>
+        <div class="sw-cell sw-mid"><span class="sw-arrow sw-left"></span><code>/state · pick FINISHED · loads: [{loadType:RACK, loadPosition:FORK}]</code></div>
+        <div class="sw-cell sw-fw sw-src">rack lifted</div>
+        <!-- Row 9: Move to station -->
+        <div class="sw-cell sw-gmc"></div>
+        <div class="sw-cell sw-mid"><span class="sw-arrow sw-right"></span><code>/order · move to PPS station</code></div>
+        <div class="sw-cell sw-fw"></div>
+        <!-- Row 10: Optional rack rotate -->
+        <div class="sw-cell sw-gmc sw-src">rotateLoad (v1.17) — optional</div>
+        <div class="sw-cell sw-mid"><span class="sw-arrow sw-right"></span><code>/order · rotateLoad HARD · loadAbsoluteTheta (radians w.r.t. face1)</code></div>
+        <div class="sw-cell sw-fw"></div>
+        <!-- Row 11: drop (rack lower) -->
+        <div class="sw-cell sw-gmc sw-src">store_task</div>
+        <div class="sw-cell sw-mid"><span class="sw-arrow sw-right"></span><code>/order · drop HARD · stationType:STORAGE_SHELF · loadType:RACK</code></div>
+        <div class="sw-cell sw-fw"></div>
+        <div class="sw-cell sw-gmc sw-src">rack_drop_success</div>
+        <div class="sw-cell sw-mid"><span class="sw-arrow sw-left"></span><code>/state · drop FINISHED · loads: []</code></div>
+        <div class="sw-cell sw-fw sw-src">rack lowered</div>
+      </div>
+
+      <div style="font-size:10px;color:var(--text-dim);margin-bottom:10px;">
+        <strong style="color:var(--text);">Rack identification (QT VDA bots):</strong> GMC navigates the bot to the exact barcode position of the target rack. The <code>pick</code> action's firmware-side barcode verification confirms the correct rack at that location — no separate GMC-dispatched <code>extScan</code> step. <code>extScan</code> v1.23.0 adds MxU floor-scan capability to the VDA protocol but is not currently dispatched by GMC for RTP bots (no call site in <code>relay_pps_subtasks.erl</code> or <code>butler_manager.erl</code> for RTP). It is a TTP action in practice — see TTP workflow below.
+      </div>
+      <div style="font-size:10px;color:var(--text-dim);margin-bottom:10px;">
+        <strong style="color:var(--text);">GO bots (Butler 1.5/2.0/2.1/XL/RangerGTP):</strong> Proprietary TCP protocol — no VDA5050. Rack lift = <code>lift[0]</code> subtask; rack store = <code>lift[1]</code>. All orchestration via internal GMC subtask dispatch.
+      </div>
+
+      <table style="font-size:10px;width:100%;">
+        <thead><tr><th>Action</th><th>Order Type</th><th>blockingType</th><th>Key Parameters</th><th>GMC Event on FINISHED</th></tr></thead>
+        <tbody>
+          <tr><td><code>pick</code> (rack lift)</td><td>node action</td><td><code style="color:var(--red);">HARD</code></td><td>lhd, stationType, loadType:RACK, height</td><td><code>rack_lift_success</code></td></tr>
+          <tr><td><code>drop</code> (rack lower)</td><td>node action</td><td><code style="color:var(--red);">HARD</code></td><td>lhd, stationType, loadType:RACK</td><td><code>rack_drop_success / rack_drop_failed</code></td></tr>
+          <tr><td><code>rotateLoad</code> (v1.17)</td><td>node action</td><td><code style="color:var(--red);">HARD</code></td><td>loadType:RACK, loadAbsoluteTheta (rad)</td><td><code>rotate_load_success</code></td></tr>
+          <tr><td><code>extScan</code></td><td>instantAction</td><td><code style="color:var(--red);">HARD</code></td><td>targetHeight, toteAbsoluteTheta, locationType</td><td><code>barcode + boundingBoxReference</code> in resultDescription</td></tr>
+          <tr><td>Move order</td><td>multi-node order</td><td>—</td><td>nodes (released:true), edges</td><td>state: lastNodeId advances</td></tr>
+          <tr><td><code>startPause / stopPause</code></td><td>instantAction</td><td><code style="color:var(--red);">HARD</code></td><td>stopType:HARD (startPause)</td><td><code>pause_success / resume_success</code></td></tr>
+        </tbody>
+      </table>
+      <div style="margin-top:8px;padding:7px 10px;background:rgba(245,197,66,0.07);border-left:3px solid var(--yellow);border-radius:4px;font-size:10px;">
+        <strong>State customizations on RTP:</strong> <code>agvPosition.liftHeight</code> (GreyOrange custom, v1.7.7) · <code>loads[].boundingBoxReference</code> with rack deviation+orientation (v1.22.0) · <code>chassis_deviations</code> in information block for crossed barcodes
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── TTP Workflow ───────────────────────────────────────────────────── -->
+<div class="epic">
+  <div class="eh" style="border-left:3px solid var(--ttp);">
+    <span class="chip c-ttp" style="font-size:11px;">TTP</span>
+    <h4>Tote-to-Person Event Workflow</h4>
+    <span style="font-size:11px;color:var(--text-dim);">HAI A42 · A42T(D) · A42T-L — all VDA5050 · manufacturer: "hai"</span>
+    <span class="chip c-vda" style="margin-left:auto;">VDA5050</span>
+  </div>
+  <div class="eb" style="padding:0;">
+    <div style="padding:12px 14px;">
+
+      <div style="font-size:10px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px;">Tote Retrieval Lifecycle</div>
+      <div style="display:grid;grid-template-columns:90px 1fr 90px;gap:0;font-size:10px;margin-bottom:14px;">
+        <div style="background:var(--surface2);border-radius:6px 0 0 0;padding:5px 8px;text-align:center;font-weight:700;color:var(--cyan);">GMC</div>
+        <div style="background:var(--surface2);padding:5px 8px;text-align:center;font-weight:700;color:var(--text-dim);">VDARemote · MQTT</div>
+        <div style="background:var(--surface2);border-radius:0 6px 0 0;padding:5px 8px;text-align:center;font-weight:700;color:var(--orange);">HAI FW</div>
+
+        <div class="sw-cell sw-gmc sw-src">tote_move_task</div>
+        <div class="sw-cell sw-mid"><span class="sw-arrow sw-right"></span><code>/order · move to storage aisle node</code></div>
+        <div class="sw-cell sw-fw"></div>
+
+        <div class="sw-cell sw-gmc"></div>
+        <div class="sw-cell sw-mid"><span class="sw-arrow sw-left"></span><code>/state · driving:true · nodeStates active</code></div>
+        <div class="sw-cell sw-fw sw-src">traversing</div>
+
+        <div class="sw-cell sw-gmc sw-src">set_fork_height_to_entry_height_without_tote</div>
+        <div class="sw-cell sw-mid"><span class="sw-arrow sw-right"></span><code>/order · forkheight SOFT · targetHeight (mm) · forkAbsoluteTheta · botAbsoluteTheta</code></div>
+        <div class="sw-cell sw-fw"></div>
+
+        <div class="sw-cell sw-gmc"></div>
+        <div class="sw-cell sw-mid"><span class="sw-arrow sw-left"></span><code>/state · forkheight FINISHED</code> (when FW acks)</div>
+        <div class="sw-cell sw-fw sw-src">fork at height</div>
+
+        <div class="sw-cell sw-gmc sw-src">extScan (deep storage)</div>
+        <div class="sw-cell sw-mid"><span class="sw-arrow sw-right"></span><code>/instantActions · extScan HARD · targetHeight · locationType:STORAGE_SHELF_DEEP1</code> (ndeep &gt; 0 only)</div>
+        <div class="sw-cell sw-fw"></div>
+        <div class="sw-cell sw-gmc sw-src">tote_scan_success</div>
+        <div class="sw-cell sw-mid"><span class="sw-arrow sw-left"></span><code>/state · extScan FINISHED · resultDescription: tote barcode</code></div>
+        <div class="sw-cell sw-fw sw-src">tote confirmed at location</div>
+        <div class="sw-cell sw-gmc sw-src">load_tote (HARD)</div>
+        <div class="sw-cell sw-mid"><span class="sw-arrow sw-right"></span><code>/order · toteLoad HARD · loadPosition:TRAY_N · loadId · targetHeight · depth · locationType:STORAGE_SHELF</code></div>
+        <div class="sw-cell sw-fw"></div>
+
+        <div class="sw-cell sw-gmc sw-src">tote_load_on_bot_success</div>
+        <div class="sw-cell sw-mid"><span class="sw-arrow sw-left"></span><code>/state · toteLoad FINISHED · loads[N].loadStatus:PRESENT + boundingBoxReference (v1.22)</code></div>
+        <div class="sw-cell sw-fw sw-src">tote on tray</div>
+
+        <div class="sw-cell sw-gmc sw-src">move to PPS</div>
+        <div class="sw-cell sw-mid"><span class="sw-arrow sw-right"></span><code>/order · move + toteLoad SOFT combined in same orderUpdate</code></div>
+        <div class="sw-cell sw-fw"></div>
+
+        <div class="sw-cell sw-gmc"></div>
+        <div class="sw-cell sw-mid"><span class="sw-arrow sw-left"></span><code>/state · driving:true · toteLoad RUNNING</code> (moves once tote visible on fork)</div>
+        <div class="sw-cell sw-fw sw-src">moving + loading</div>
+
+        <div class="sw-cell sw-gmc sw-src">tote_load_finished (TRAY_N)</div>
+        <div class="sw-cell sw-mid"><span class="sw-arrow sw-left"></span><code>/state · toteLoad FINISHED</code> (when entire orderUpdate done)</div>
+        <div class="sw-cell sw-fw"></div>
+
+        <div class="sw-cell sw-gmc sw-src">unload_tote at PPS</div>
+        <div class="sw-cell sw-mid"><span class="sw-arrow sw-right"></span><code>/order · toteUnload HARD · loadPosition:TRAY_N · locationType:CONVEYOR/RELAY_1/RELAY_2</code></div>
+        <div class="sw-cell sw-fw"></div>
+
+        <div class="sw-cell sw-gmc sw-src">tote_unload_finished</div>
+        <div class="sw-cell sw-mid"><span class="sw-arrow sw-left"></span><code>/state · toteUnload FINISHED · loads[N].loadStatus:NOT_PRESENT</code></div>
+        <div class="sw-cell sw-fw sw-src">tote deposited</div>
+      </div>
+
+      <table style="font-size:10px;width:100%;margin-bottom:10px;">
+        <thead><tr><th>Action</th><th>Order Type</th><th>blockingType</th><th>Key Parameters</th><th>GMC Event on FINISHED</th></tr></thead>
+        <tbody>
+          <tr><td><code>forkheight</code></td><td>node action</td><td><code style="color:var(--yellow);">SOFT</code> (FINISHED on FW ack)</td><td>targetHeight (mm), targetTray, forkAbsoluteTheta, botAbsoluteTheta</td><td><code>update_fork_height_success / failed</code></td></tr>
+          <tr><td><code>toteLoad</code> HARD</td><td>node action</td><td><code style="color:var(--red);">HARD</code></td><td>loadPosition:TRAY_N, loadId, targetHeight, depth, locationType, scanEnable</td><td><code>tote_load_on_bot_success / failed</code></td></tr>
+          <tr><td><code>toteLoad</code> SOFT</td><td>node action (combined with move)</td><td><code style="color:var(--yellow);">SOFT</code></td><td>same as HARD; bot moves once tote visible on fork in state</td><td><code>tote_load_finished (loadPositionId)</code></td></tr>
+          <tr><td><code>toteUnload</code></td><td>node action</td><td><code style="color:var(--red);">HARD</code> or <code style="color:var(--yellow);">SOFT</code></td><td>loadPosition:TRAY_N, locationType, binId</td><td><code>tote_unload_finished</code></td></tr>
+          <tr><td><code>pre_tote_unload</code></td><td>node action</td><td><code style="color:var(--red);">HARD</code></td><td>pre-positioning before toteUnload</td><td><code>pre_tote_unload_success / failed</code></td></tr>
+          <tr><td><code>intScan</code></td><td>instantAction</td><td><code style="color:var(--red);">HARD</code></td><td>binId, loadPosition:TRAY_N</td><td>actionStatus FINISHED</td></tr>
+          <tr><td><code>intScanAll</code></td><td>instantAction</td><td><code style="color:var(--red);">HARD</code></td><td>none — rescans all trays, refreshes loads[]</td><td>loads[] updated in state</td></tr>
+          <tr><td><code>initRequest</code></td><td>instantAction</td><td><code style="color:var(--red);">HARD</code></td><td>loads (list), withScan (bool)</td><td>INITIALIZING → FINISHED</td></tr>
+          <tr><td><code>recovery</code></td><td>instantAction</td><td><code style="color:var(--green);">NONE</code></td><td>none — HAI FW only</td><td>actionStatus FINISHED</td></tr>
+          <tr><td><code>safetyControl</code> (v1.21)</td><td>instantAction</td><td><code style="color:var(--green);">NONE</code></td><td>enableSafeSpeed:bool (HAI safety vest)</td><td>speed profile switched</td></tr>
+        </tbody>
+      </table>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:10px;">
+        <div style="padding:7px 10px;background:rgba(245,197,66,0.07);border-left:3px solid var(--yellow);border-radius:4px;">
+          <strong>Per-variant load positions:</strong><br>
+          A42 (4-tray): TRAY_1–TRAY_4 · A42T(D)-E1 (8-tray): TRAY_1–TRAY_8 + FORK · A42T-L-E2-H: TRAY_1–TRAY_8 + FORK_1 + FORK_2 (v1.14)
+        </div>
+        <div style="padding:7px 10px;background:rgba(245,197,66,0.07);border-left:3px solid var(--orange);border-radius:4px;">
+          <strong>VDA restart caution:</strong> If VDA restarts while bot is paused, kubot init is NOT issued — loads deleted from state. Use <code>paused</code> field in state to detect and re-init.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── HTM Workflow ───────────────────────────────────────────────────── -->
+<div class="epic">
+  <div class="eh" style="border-left:3px solid var(--htm);">
+    <span class="chip c-htm" style="font-size:11px;">HTM</span>
+    <h4>Horizontal Tote Mover Event Workflow</h4>
+    <span style="font-size:11px;color:var(--text-dim);">HTM_QT_M5F (fork-pick) · hai_relay_K50 · K50_L_E1 · K50_X_E1 (conveyor-transfer)</span>
+    <span class="chip c-vda" style="margin-left:auto;">VDA5050 (all)</span>
+  </div>
+  <div class="eb" style="padding:0;">
+    <div style="padding:12px 14px;">
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;">
+
+        <!-- HTM_QT_M5F fork-pick flow -->
+        <div>
+          <div style="font-size:10px;font-weight:700;color:var(--htm);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px;">HTM_QT_M5F — Fork-Pick (relay pick/drop)</div>
+          <div style="display:grid;grid-template-columns:80px 1fr 60px;gap:0;font-size:10px;margin-bottom:10px;">
+            <div style="background:var(--surface2);border-radius:6px 0 0 0;padding:4px 7px;text-align:center;font-weight:700;color:var(--cyan);">GMC</div>
+            <div style="background:var(--surface2);padding:4px 7px;text-align:center;font-weight:700;color:var(--text-dim);">VDARemote</div>
+            <div style="background:var(--surface2);border-radius:0 6px 0 0;padding:4px 7px;text-align:center;font-weight:700;color:var(--orange);">FW</div>
+
+            <div class="sw-cell sw-gmc sw-src">move to relay</div>
+            <div class="sw-cell sw-mid"><span class="sw-arrow sw-right"></span><code>/order · move · secondary profile 300 mm/s dock</code></div>
+            <div class="sw-cell sw-fw"></div>
+
+            <div class="sw-cell sw-gmc sw-src">htm_load_tote · forkheight</div>
+            <div class="sw-cell sw-mid"><span class="sw-arrow sw-right"></span><code>/order · forkheight HARD · targetHeight down=240mm (hw:241-890mm)</code></div>
+            <div class="sw-cell sw-fw"></div>
+
+            <div class="sw-cell sw-gmc"></div>
+            <div class="sw-cell sw-mid"><span class="sw-arrow sw-right"></span><code>/order · pick HARD · stationType:RELAY_1/RELAY_2 (v1.18) · loadType:TOTE</code></div>
+            <div class="sw-cell sw-fw"></div>
+
+            <div class="sw-cell sw-gmc sw-src">rack_lift_success</div>
+            <div class="sw-cell sw-mid"><span class="sw-arrow sw-left"></span><code>/state · pick FINISHED · loads[FORK]</code></div>
+            <div class="sw-cell sw-fw sw-src">tote on fork</div>
+
+            <div class="sw-cell sw-gmc sw-src">move to TTP/station</div>
+            <div class="sw-cell sw-mid"><span class="sw-arrow sw-right"></span><code>/order · move order</code></div>
+            <div class="sw-cell sw-fw"></div>
+
+            <div class="sw-cell sw-gmc sw-src">htm_unload_tote</div>
+            <div class="sw-cell sw-mid"><span class="sw-arrow sw-right"></span><code>/order · drop HARD · stationType:RELAY_1/RELAY_2</code></div>
+            <div class="sw-cell sw-fw"></div>
+
+            <div class="sw-cell sw-gmc sw-src">htm_unload_success</div>
+            <div class="sw-cell sw-mid"><span class="sw-arrow sw-left"></span><code>/state · drop FINISHED · loads:[]</code></div>
+            <div class="sw-cell sw-fw sw-src">tote deposited</div>
+          </div>
+        </div>
+
+        <!-- K50 conveyor-transfer flow -->
+        <div>
+          <div style="font-size:10px;font-weight:700;color:var(--htm);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px;">hai_relay_K50 / K50_L_E1 / K50_X_E1 — Conveyor Transfer</div>
+          <div style="display:grid;grid-template-columns:80px 1fr 60px;gap:0;font-size:10px;margin-bottom:10px;">
+            <div style="background:var(--surface2);border-radius:6px 0 0 0;padding:4px 7px;text-align:center;font-weight:700;color:var(--cyan);">GMC</div>
+            <div style="background:var(--surface2);padding:4px 7px;text-align:center;font-weight:700;color:var(--text-dim);">VDARemote</div>
+            <div style="background:var(--surface2);border-radius:0 6px 0 0;padding:4px 7px;text-align:center;font-weight:700;color:var(--orange);">FW</div>
+
+            <div class="sw-cell sw-gmc sw-src">move to source</div>
+            <div class="sw-cell sw-mid"><span class="sw-arrow sw-right"></span><code>/order · move · slow-dock 300 mm/s (K50_L/X: 1000 mm/s)</code></div>
+            <div class="sw-cell sw-fw"></div>
+
+            <div class="sw-cell sw-gmc sw-src">htm_load_tote</div>
+            <div class="sw-cell sw-mid"><span class="sw-arrow sw-right"></span><code>/order · toteLoad SOFT · locationType:CONVEYOR</code></div>
+            <div class="sw-cell sw-fw"></div>
+
+            <div class="sw-cell sw-gmc sw-src">update_fork_height_success</div>
+            <div class="sw-cell sw-mid"><span class="sw-arrow sw-left"></span><code>/state · toteLoad RUNNING → FINISHED (when orderUpdate done)</code></div>
+            <div class="sw-cell sw-fw sw-src">tote on conveyor</div>
+
+            <div class="sw-cell sw-gmc sw-src">K50_X_E1: syncMove (order bot relay)</div>
+            <div class="sw-cell sw-mid"><span class="sw-arrow sw-right"></span><code>/order · syncMove NONE on follower · leaderID/followerID params (v1.20: node action)</code></div>
+            <div class="sw-cell sw-fw"></div>
+
+            <div class="sw-cell sw-gmc sw-src">move to dest</div>
+            <div class="sw-cell sw-mid"><span class="sw-arrow sw-right"></span><code>/order · move to drop station</code></div>
+            <div class="sw-cell sw-fw"></div>
+
+            <div class="sw-cell sw-gmc sw-src">htm_unload_tote</div>
+            <div class="sw-cell sw-mid"><span class="sw-arrow sw-right"></span><code>/order · toteUnload SOFT · locationType:CONVEYOR</code></div>
+            <div class="sw-cell sw-fw"></div>
+
+            <div class="sw-cell sw-gmc sw-src">htm_unload_tote_success</div>
+            <div class="sw-cell sw-mid"><span class="sw-arrow sw-left"></span><code>/state · toteUnload FINISHED</code></div>
+            <div class="sw-cell sw-fw sw-src">tote off conveyor</div>
+          </div>
+        </div>
+      </div>
+
+      <table style="font-size:10px;width:100%;margin-bottom:8px;">
+        <thead><tr><th>Action</th><th>Variant</th><th>blockingType</th><th>Key Parameters</th><th>GMC Event</th></tr></thead>
+        <tbody>
+          <tr><td><code>pick</code> (relay)</td><td>HTM_QT_M5F</td><td><code style="color:var(--red);">HARD</code></td><td>stationType:RELAY_1/RELAY_2, loadType:TOTE</td><td><code>rack_lift_success / htm_load_tote_failure</code></td></tr>
+          <tr><td><code>drop</code> (relay)</td><td>HTM_QT_M5F</td><td><code style="color:var(--red);">HARD</code></td><td>stationType:RELAY_1/RELAY_2</td><td><code>htm_unload_success / htm_unload_tote_failure</code></td></tr>
+          <tr><td><code>forkheight</code></td><td>HTM_QT_M5F</td><td><code style="color:var(--red);">HARD</code></td><td>targetHeight:240mm (sys), hw range 241–890mm, offset:50mm</td><td><code>set_fork_height_success / failed</code></td></tr>
+          <tr><td><code>toteLoad</code></td><td>K50 family</td><td><code style="color:var(--yellow);">SOFT</code></td><td>locationType:CONVEYOR, safeHeightMin/Max (cantilever, v1.10)</td><td><code>update_fork_height_success / htm_load_tote_failure</code></td></tr>
+          <tr><td><code>toteUnload</code></td><td>K50 family</td><td><code style="color:var(--yellow);">SOFT</code></td><td>locationType:CONVEYOR</td><td><code>htm_unload_tote_success / htm_unload_tote_failure</code></td></tr>
+          <tr><td><code>syncMove</code> (v1.20)</td><td>K50_X_E1 only</td><td><code style="color:var(--green);">NONE</code></td><td>leaderID/IP, followerID/IP, path:straight|curve (node action)</td><td>order bot relay coordination</td></tr>
+          <tr><td><code>updateLoadStatus</code></td><td>K50 (HAI PORT)</td><td><code style="color:var(--red);">HARD</code></td><td>loads list + actionType:toteLoad|toteUnload</td><td>loads[] updated in state</td></tr>
+        </tbody>
+      </table>
+      <div style="padding:7px 10px;background:rgba(245,197,66,0.07);border-left:3px solid var(--htm);border-radius:4px;font-size:10px;">
+        <strong>Manufacturer topic quirk (HAI HTM):</strong> K50_L_E1, K50_X_E1 → topic manufacturer = <code>"k50_l_e1"</code> / <code>"k50_x_e1"</code> (no "hai_" prefix). VTM_HAI_A42_TDV_E1 → <code>"vtm_hai_a42_tdv_e1"</code>. See <code>vda5050_v2.erl:category_from_approach/2</code>.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── VTM Workflow ───────────────────────────────────────────────────── -->
+<div class="epic">
+  <div class="eh" style="border-left:3px solid var(--vtm);">
+    <span class="chip c-vtm" style="font-size:11px;">VTM</span>
+    <h4>Vertical Tote Mover Event Workflow</h4>
+    <span style="font-size:11px;color:var(--text-dim);">QT C56 variants (7–12m) · HAI A42T(D)-E1 / A42T-L-E2-H — all VDA5050</span>
+    <span class="chip c-vda" style="margin-left:auto;">VDA5050 (all)</span>
+  </div>
+  <div class="eb" style="padding:0;">
+    <div style="padding:12px 14px;">
+
+      <div style="font-size:10px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px;">Tote Retrieval + Delivery Lifecycle</div>
+      <div style="display:grid;grid-template-columns:90px 1fr 90px;gap:0;font-size:10px;margin-bottom:14px;">
+        <div style="background:var(--surface2);border-radius:6px 0 0 0;padding:5px 8px;text-align:center;font-weight:700;color:var(--cyan);">GMC</div>
+        <div style="background:var(--surface2);padding:5px 8px;text-align:center;font-weight:700;color:var(--text-dim);">VDARemote · MQTT</div>
+        <div style="background:var(--surface2);border-radius:0 6px 0 0;padding:5px 8px;text-align:center;font-weight:700;color:var(--orange);">Bot FW</div>
+
+        <div class="sw-cell sw-gmc sw-src">relay_group_task</div>
+        <div class="sw-cell sw-mid"><span class="sw-arrow sw-right"></span><code>/order · move to storage aisle + forkheight SOFT (pre-position)</code></div>
+        <div class="sw-cell sw-fw"></div>
+
+        <div class="sw-cell sw-gmc"></div>
+        <div class="sw-cell sw-mid"><span class="sw-arrow sw-left"></span><code>/state · driving:true · forkheight RUNNING then FINISHED (when FW acks)</code></div>
+        <div class="sw-cell sw-fw sw-src">fork pre-positioned</div>
+
+        <div class="sw-cell sw-gmc sw-src">vtm_aisle_checkpoint</div>
+        <div class="sw-cell sw-mid"><span class="sw-arrow sw-right"></span><code>/order · move to pick face · zoneSetId:vtm_storage_aisle</code></div>
+        <div class="sw-cell sw-fw"></div>
+
+        <div class="sw-cell sw-gmc sw-src">pre_fork_clear</div>
+        <div class="sw-cell sw-mid"><span class="sw-arrow sw-right"></span><code>/order · forkheight HARD to exact targetTray height</code></div>
+        <div class="sw-cell sw-fw"></div>
+
+        <div class="sw-cell sw-gmc sw-src">load_tote (single deep)</div>
+        <div class="sw-cell sw-mid"><span class="sw-arrow sw-right"></span><code>/order · toteLoad HARD · loadPosition:TRAY_N · locationType:STORAGE_SHELF · binId · depth · loadAbsoluteTheta</code></div>
+        <div class="sw-cell sw-fw"></div>
+
+        <div class="sw-cell sw-gmc sw-src">tote_load_finished</div>
+        <div class="sw-cell sw-mid"><span class="sw-arrow sw-left"></span><code>/state · toteLoad FINISHED · loads[TRAY_N].loadStatus:PRESENT</code></div>
+        <div class="sw-cell sw-fw sw-src">tote on tray</div>
+
+        <div class="sw-cell sw-gmc sw-src">double-deep: repeat for inner tote</div>
+        <div class="sw-cell sw-mid"><span class="sw-arrow sw-right"></span><code>/order · toteLoad HARD · locationType:STORAGE_SHELF_DEEP1 · loadPosition:TRAY_N</code></div>
+        <div class="sw-cell sw-fw"></div>
+
+        <div class="sw-cell sw-gmc sw-src">move to relay station</div>
+        <div class="sw-cell sw-mid"><span class="sw-arrow sw-right"></span><code>/order · move (bi-dir _06 always-rotate) + forkheight SOFT combined</code></div>
+        <div class="sw-cell sw-fw"></div>
+
+        <div class="sw-cell sw-gmc sw-src">unload_tote</div>
+        <div class="sw-cell sw-mid"><span class="sw-arrow sw-right"></span><code>/order · toteUnload HARD/SOFT · loadPosition:TRAY_N · locationType:RELAY_1/RELAY_2/CONVEYOR</code></div>
+        <div class="sw-cell sw-fw"></div>
+
+        <div class="sw-cell sw-gmc sw-src">tote_unload_finished</div>
+        <div class="sw-cell sw-mid"><span class="sw-arrow sw-left"></span><code>/state · toteUnload FINISHED · loads[TRAY_N].loadStatus:NOT_PRESENT</code></div>
+        <div class="sw-cell sw-fw sw-src">tote deposited</div>
+      </div>
+
+      <table style="font-size:10px;width:100%;margin-bottom:10px;">
+        <thead><tr><th>Action</th><th>Variant note</th><th>blockingType</th><th>Key Parameters</th><th>GMC Event</th></tr></thead>
+        <tbody>
+          <tr><td><code>forkheight</code> pre-position</td><td>all VTM</td><td><code style="color:var(--yellow);">SOFT</code> (while moving)</td><td>targetHeight (mm), targetTray, forkAbsoluteTheta, botAbsoluteTheta</td><td><code>update_fork_height_success</code> (FW ack)</td></tr>
+          <tr><td><code>forkheight</code> exact position</td><td>all VTM</td><td><code style="color:var(--red);">HARD</code> (stationary, Port IO)</td><td>targetHeight overrides targetTray if both given</td><td><code>set_fork_height_success / failed</code></td></tr>
+          <tr><td><code>toteLoad</code> single deep</td><td>all VTM</td><td><code style="color:var(--red);">HARD</code> or <code style="color:var(--yellow);">SOFT</code></td><td>locationType:STORAGE_SHELF, loadPosition:TRAY_N, loadId, depth, loadAbsoluteTheta</td><td><code>tote_load_finished (TRAY_N)</code></td></tr>
+          <tr><td><code>toteLoad</code> double deep</td><td>QT ST_2D · HAI A42T(D)</td><td><code style="color:var(--red);">HARD</code></td><td>locationType:STORAGE_SHELF_DEEP1 (outer must be removed first)</td><td><code>tote_load_finished (TRAY_N)</code></td></tr>
+          <tr><td><code>toteLoad</code> cantilever</td><td>K50 HAI PORT</td><td><code style="color:var(--yellow);">SOFT</code></td><td>safeHeightMin/safeHeightMax — FINISHED delayed until fork crosses safeHeightMin (v1.10)</td><td><code>tote_load_finished</code></td></tr>
+          <tr><td><code>toteUnload</code></td><td>all VTM</td><td><code style="color:var(--red);">HARD</code> or <code style="color:var(--yellow);">SOFT</code></td><td>loadPosition:TRAY_N / FORK_1 / FORK_2 (v1.14), locationType:RELAY_1/RELAY_2/CONVEYOR</td><td><code>tote_unload_finished</code></td></tr>
+          <tr><td>Custom <code>loadModel</code> (v1.16)</td><td>Variable-size VTM</td><td>—</td><td>binModel in pick/toteLoad for non-standard tote size</td><td>—</td></tr>
+        </tbody>
+      </table>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:10px;">
+        <div style="padding:7px 10px;background:rgba(245,197,66,0.07);border-left:3px solid var(--vtm);border-radius:4px;">
+          <strong>SOFT toteLoad behavior:</strong> Bot starts moving as soon as tote is visible on fork in state message. <code>toteLoad FINISHED</code> fires only when the entire order update completes — not when the action itself finishes mid-order.
+        </div>
+        <div style="padding:7px 10px;background:rgba(245,197,66,0.07);border-left:3px solid var(--yellow);border-radius:4px;">
+          <strong>FORK_2 (v1.14):</strong> Second fork arm for double-gripper VTM variants. <code>FORK</code> and <code>FORK_1</code> treated as identical by GMC. Use <code>FORK_2</code> for second arm independently.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Instant Actions Reference ────────────────────────────────────────── -->
+<div class="card">
+  <div class="card-title">Instant Actions — Cross-Category Reference <span class="src">vda5050_v2.erl · encode_instant_action_internal/2 · Confluence v1.23.0</span></div>
+  <table style="font-size:10px;width:100%;">
+    <thead>
+      <tr><th>Action</th><th>blockingType</th><th style="text-align:center;">RTP</th><th style="text-align:center;">TTP</th><th style="text-align:center;">HTM</th><th style="text-align:center;">VTM</th><th>Notes</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>initRequest</code></td><td><code style="color:var(--red);">HARD</code></td><td style="text-align:center;color:var(--green);">●</td><td style="text-align:center;color:var(--green);">●</td><td style="text-align:center;color:var(--green);">●</td><td style="text-align:center;color:var(--green);">●</td><td>Power cycle: FW init + tray scan. While paused: resume first, then init</td></tr>
+      <tr><td><code>startPause</code></td><td><code style="color:var(--red);">HARD</code> / <code style="color:var(--yellow);">SOFT</code></td><td style="text-align:center;color:var(--green);">●</td><td style="text-align:center;color:var(--green);">●</td><td style="text-align:center;color:var(--green);">●</td><td style="text-align:center;color:var(--green);">●</td><td>SOFT = execute while in motion (GMC/VDA implement as VDA NONE)</td></tr>
+      <tr><td><code>stopPause</code></td><td><code style="color:var(--red);">HARD</code></td><td style="text-align:center;color:var(--green);">●</td><td style="text-align:center;color:var(--green);">●</td><td style="text-align:center;color:var(--green);">●</td><td style="text-align:center;color:var(--green);">●</td><td>VDA holds until existing task finishes before resuming</td></tr>
+      <tr><td><code>startCharging</code></td><td><code style="color:var(--green);">NONE</code></td><td style="text-align:center;color:var(--green);">●</td><td style="text-align:center;color:var(--green);">●</td><td style="text-align:center;color:var(--green);">●</td><td style="text-align:center;color:var(--green);">●</td><td>Full path (nodes+edges) embedded in actionParameters</td></tr>
+      <tr><td><code>stopCharging</code></td><td><code style="color:var(--green);">NONE</code></td><td style="text-align:center;color:var(--green);">●</td><td style="text-align:center;color:var(--green);">●</td><td style="text-align:center;color:var(--green);">●</td><td style="text-align:center;color:var(--green);">●</td><td>Reverse path back to reinit barcode</td></tr>
+      <tr><td><code>extScan</code></td><td><code style="color:var(--red);">HARD</code></td><td style="text-align:center;color:var(--yellow);" title="v1.23 protocol capability — not dispatched by GMC for RTP currently">○</td><td style="text-align:center;color:var(--green);">●</td><td style="text-align:center;color:var(--yellow);">cond</td><td style="text-align:center;color:var(--green);">●</td><td><strong>TTP primary</strong>: shelf scan (ttp_bot_manager_utils:tote_scan) before loading from deep storage. GMC dispatches <code>{tote_scan,{Height,Direction,LocationType}}</code>. RTP: v1.23 adds MxU floor-scan protocol support but <strong>not yet dispatched by GMC for RTP</strong> — rack confirmed via bot navigation to exact barcode position + pick action FW verify</td></tr>
+      <tr><td><code>intScan</code></td><td><code style="color:var(--red);">HARD</code></td><td style="text-align:center;color:var(--text-muted);">·</td><td style="text-align:center;color:var(--green);">●</td><td style="text-align:center;color:var(--yellow);">cond</td><td style="text-align:center;color:var(--green);">●</td><td>Tray bots only (TTP/VTM/HTM). Scan specific tray by loadPosition. <strong>Not applicable to RTP</strong> — no tray state</td></tr>
+      <tr><td><code>intScanAll</code></td><td><code style="color:var(--red);">HARD</code></td><td style="text-align:center;color:var(--text-muted);">·</td><td style="text-align:center;color:var(--green);">●</td><td style="text-align:center;color:var(--yellow);">cond</td><td style="text-align:center;color:var(--green);">●</td><td>Tray bots only (TTP/VTM/HTM). Refreshes entire loads[] in state. <strong>Not applicable to RTP</strong> — racks have no tray positions</td></tr>
+      <tr><td><code>updateLoadStatus</code></td><td><code style="color:var(--red);">HARD</code></td><td style="text-align:center;color:var(--text-muted);">·</td><td style="text-align:center;color:var(--yellow);">cond</td><td style="text-align:center;color:var(--green);">●</td><td style="text-align:center;color:var(--yellow);">cond</td><td>HAI PORT: override loads[] when FW handles tote externally (v1.3.4)</td></tr>
+      <tr><td><code>mapUpdate</code></td><td><code style="color:var(--green);">NONE</code></td><td style="text-align:center;color:var(--green);">●</td><td style="text-align:center;color:var(--green);">●</td><td style="text-align:center;color:var(--green);">●</td><td style="text-align:center;color:var(--green);">●</td><td>Zipped JSON blob. Executes after current order finishes. Follow with factsheetRequest</td></tr>
+      <tr><td><code>factsheetRequest</code></td><td><code style="color:var(--green);">NONE</code></td><td style="text-align:center;color:var(--green);">●</td><td style="text-align:center;color:var(--green);">●</td><td style="text-align:center;color:var(--green);">●</td><td style="text-align:center;color:var(--green);">●</td><td>FINISHED instant; factsheet sent separately. Re-issue if not received in 10s</td></tr>
+      <tr><td><code>recovery</code></td><td><code style="color:var(--green);">NONE</code></td><td style="text-align:center;color:var(--text-muted);">·</td><td style="text-align:center;color:var(--green);">●</td><td style="text-align:center;color:var(--yellow);">cond</td><td style="text-align:center;color:var(--yellow);">cond</td><td>HAI FW only — issues firmware recovery command</td></tr>
+      <tr><td><code>safetyControl</code> (v1.21)</td><td><code style="color:var(--green);">NONE</code></td><td style="text-align:center;color:var(--text-muted);">·</td><td style="text-align:center;color:var(--green);">●</td><td style="text-align:center;color:var(--yellow);">cond</td><td style="text-align:center;color:var(--yellow);">cond</td><td>enableSafeSpeed — for HAI safety vest speed reduction</td></tr>
+      <tr><td><code>startSleep / stopSleep</code></td><td><code style="color:var(--red);">HARD</code></td><td style="text-align:center;color:var(--green);">●</td><td style="text-align:center;color:var(--green);">●</td><td style="text-align:center;color:var(--green);">●</td><td style="text-align:center;color:var(--green);">●</td><td>Power-save mode. All categories</td></tr>
+    </tbody>
+  </table>
+  <div style="font-size:10px;color:var(--text-dim);margin-top:6px;"><span style="color:var(--green);">●</span> = applicable · <span style="color:var(--yellow);">cond</span> = conditional/variant-specific · <span style="color:var(--text-muted);">·</span> = not applicable · <span style="color:var(--yellow);">○</span> = protocol-capable but not currently dispatched by GMC</div>
+</div>
+
+<!-- ── State Message Reference ───────────────────────────────────────── -->
+<div class="card">
+  <div class="card-title">State Message Key Fields <span class="src">/state topic · vda5050_v2.erl:handle/4 · Confluence v1.23.0</span></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:10px;">
+    <table>
+      <thead><tr><th>Field</th><th>Type / Values</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td><code>driving</code></td><td>bool</td><td>true while in motion</td></tr>
+        <tr><td><code>orderId / orderUpdateId</code></td><td>string / int</td><td>tracks current order</td></tr>
+        <tr><td><code>lastNodeId</code></td><td>string</td><td>last crossed barcode nodeId</td></tr>
+        <tr><td><code>agvPosition.liftHeight</code></td><td>float (mm)</td><td>GreyOrange custom (v1.7.7) — not in VDA5050 spec</td></tr>
+        <tr><td><code>loads[].loadStatus</code></td><td>UNKNOWN/PRESENT/NOT_PRESENT</td><td>v1.11.0 — tray occupancy</td></tr>
+        <tr><td><code>loads[].boundingBoxReference</code></td><td>{x,y,z,theta}</td><td>v1.22.0 — rack deviation/orientation</td></tr>
+        <tr><td><code>paused</code></td><td>bool</td><td>critical — check on VDA restart to avoid losing load state</td></tr>
+        <tr><td><code>safetyState.eStop</code></td><td>"AUTOACK"</td><td>auto-acknowledging e-stop</td></tr>
+      </tbody>
+    </table>
+    <table>
+      <thead><tr><th>Field</th><th>Type / Values</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td><code>actionStates[].actionStatus</code></td><td>INITIALIZING/RUNNING/PAUSED/FINISHED/FAILED</td><td>per action tracking</td></tr>
+        <tr><td><code>information[].obstacles</code></td><td>[{face, area, distance}]</td><td>front/back LiDAR obstacles</td></tr>
+        <tr><td><code>information[].chassis_deviations</code></td><td>{nodeId→{dX,dY,dT}}</td><td>4 decimal places in meters/radians</td></tr>
+        <tr><td><code>errors[].errorLevel</code></td><td>WARNING / FATAL</td><td>WARNING: reservation held. FATAL: moving reservations cleared</td></tr>
+        <tr><td><code>errors[].errorReferences.activateBombDrop</code></td><td>bool</td><td>true = GMC reserves deceleration span + bot_length/2</td></tr>
+        <tr><td><code>errors[].errorReferences.recoveryAction</code></td><td>string (v1.14)</td><td>e.g. "BLOCK_TOTE_LOC" — tells GMC which recovery to execute</td></tr>
+        <tr><td><code>batteryState.batteryHealth</code></td><td>0–100</td><td>v1.9.0 addition</td></tr>
+        <tr><td><code>velocity.{vx,vy,omega}</code></td><td>float m/s, rad/s</td><td>real-time velocity vector</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+</div><!-- /tab-vda -->
 
 <!-- ═══ TAB 7: EXECUTION ENGINE ═══ -->
 <div id="tab-engine" class="content">
